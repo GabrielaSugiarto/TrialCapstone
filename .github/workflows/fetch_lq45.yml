@@ -2,8 +2,8 @@ name: Fetch LQ45 Daily
 
 on:
   schedule:
-    # 09:05 UTC = 16:05 WIB, Senin–Jumat
-    - cron: '25 12 * * 1-5'
+    - cron: '23 00 * * 1-5'
+      timezone: "Asia/Jakarta"
   workflow_dispatch:  # bisa trigger manual dari tab Actions
 
 jobs:
