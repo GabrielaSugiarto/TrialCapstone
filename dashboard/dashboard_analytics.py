@@ -118,7 +118,7 @@ import requests
 @st.cache_data(ttl=30)
 def load_data(user_id: int) -> pd.DataFrame:
     response = requests.get(
-        "https://coba-render-vercel.vercel.app/transactions/",
+        "https://web-production-00bb0.up.railway.app/transactions/",
         params={"user_id": user_id}
     )
     df = pd.DataFrame(response.json())
@@ -134,7 +134,7 @@ def load_data(user_id: int) -> pd.DataFrame:
 @st.cache_data(ttl=30)
 def load_budget(user_id: int) -> pd.DataFrame:
     response = requests.get(
-        "https://coba-render-vercel.vercel.app/budget/",
+        "https://web-production-00bb0.up.railway.app/budget/",
         params={"user_id": user_id}
     )
     df = pd.DataFrame(response.json())
