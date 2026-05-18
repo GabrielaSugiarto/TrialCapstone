@@ -118,11 +118,24 @@ import requests
 @st.cache_data(ttl=30)
 def load_data(user_id: int) -> pd.DataFrame:
     response = requests.get(
-        "https://web-production-00bb0.up.railway.app/transactions/",
+        "https://coba-render-vercel.vercel.app/transactions/",
         params={"user_id": user_id}
     )
-    df = pd.DataFrame(response.json())
-
+    
+    raw = response.json()
+    
+    if not raw:
+        return pd.DataFrame()
+    
+    if isinstance(raw, dict):
+        raw = raw.get("data", raw.get("transactions", raw.get("results", [])))
+    
+    df = pd.DataFrame(raw)
+    
+    if "date" not in df.columns:
+        st.error(f"Kolom tersedia: {df.columns.tolist()}")
+        st.stop()
+    
     df["date"]     = pd.to_datetime(df["date"], errors="coerce")
     df["amount"]   = pd.to_numeric(df["amount"], errors="coerce").fillna(0)
     df["category"] = df["category"].fillna("Pemasukan")
