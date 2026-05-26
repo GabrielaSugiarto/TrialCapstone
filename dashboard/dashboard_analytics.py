@@ -77,36 +77,34 @@ def fmt(amount: float) -> str:
 
 def get_status(expense, income, budget_total=0, days_elapsed=0, days_in_month=30):
     """
-    Status berdasarkan 3 faktor:
-    - Rasio expense/income
-    - Sisa budget (jika ada data budget)
-    - Kecepatan pengeluaran (apakah sudah > 80% budget sebelum bulan habis)
+    Status berdasarkan logika calculate_warning_metrics() dari backend:
+    - BAHAYA  : expense > budget ATAU proyeksi > budget * 1.2
+    - WASPADA : proyeksi > budget ATAU sudah pakai >=80% budget sebelum 80% bulan berjalan
+    - AMAN    : selain kondisi di atas
+    Fallback ke rasio expense/income jika tidak ada data budget.
     """
     if income == 0:
         return "Tidak Ada Data", "status-waspada"
-    
-    r = expense / income
-    
-    # Jika ada data budget, cek kecepatan pengeluaran
+
+    # ── Jika ada data budget, pakai logika backend ────────────────────────────
     if budget_total > 0 and days_in_month > 0:
-        budget_used_pct = expense / budget_total  # % budget terpakai
-        month_elapsed_pct = days_elapsed / days_in_month  # % bulan berjalan
-        
-        # Proyeksi pengeluaran akhir bulan
-        if days_elapsed > 0:
-            projected = expense / days_elapsed * days_in_month
-            projected_pct = projected / budget_total
-        else:
-            projected_pct = 0
-        
-        # Boros jika sudah pakai >80% budget sebelum 80% bulan berjalan
-        if budget_used_pct >= 0.80 and month_elapsed_pct < 0.80:
-            return "BOROS", "status-bahaya"
-        # Waspada jika proyeksi akhir bulan melebihi budget
-        if projected_pct > 1.10:
+        safe_day          = max(days_elapsed, 1)
+        safe_days         = max(days_in_month, safe_day)
+        time_progress     = safe_day / safe_days
+        spending_ratio    = expense / budget_total
+        daily_average     = expense / safe_day
+        projected         = daily_average * safe_days
+        is_too_fast       = spending_ratio >= 0.80 and time_progress < 0.80
+
+        if expense > budget_total or projected > budget_total * 1.2:
+            return "BAHAYA", "status-bahaya"
+        elif projected > budget_total or is_too_fast:
             return "WASPADA", "status-waspada"
-    
-    # Fallback ke rasio expense/income
+        else:
+            return "AMAN", "status-aman"
+
+    # ── Fallback: tidak ada budget, pakai rasio expense/income ────────────────
+    r = expense / income
     if r <= 0.60:
         return "AMAN", "status-aman"
     elif r <= 0.80:
