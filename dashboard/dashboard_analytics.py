@@ -284,33 +284,39 @@ def main():
     saldo         = income_total - expense_total
     savings_pct   = (saldo / income_total * 100) if income_total > 0 else 0
 
-    # Hitung parameter budget untuk bulan yang sedang dilihat
     today = date.today()
-    current_month_str = today.strftime("%Y-%m")
 
-    # Filter budget bulan ini
+    # Filter budget sesuai rentang periode
     if not df_budget.empty:
         months_in_range = pd.period_range(
             start=date_start.strftime("%Y-%m"),
             end=date_end.strftime("%Y-%m"),
             freq="M"
         ).strftime("%Y-%m").tolist()
-    
         budget_this_month = df_budget[df_budget["month"].isin(months_in_range)]["amount"].sum()
     else:
         budget_this_month = 0
 
     days_in_period = (date_end - date_start).days + 1
-    days_elapsed   = days_in_period  # seluruh periode sudah "berjalan"
+    num_months     = days_in_period / 30
 
-    days_in_month_for_status = days_in_period
+    if budget_this_month > 0 and num_months > 0:
+        expense_per_month = expense_total / num_months
+        budget_per_month  = budget_this_month / num_months
+        income_per_month  = income_total / num_months
+        last_month_days   = today.day
+        full_month_days   = calendar.monthrange(today.year, today.month)[1]
 
-    status_txt, status_cls = get_status(
-        expense_total, income_total,
-        budget_total=budget_this_month,
-        days_elapsed=days_elapsed,
-        days_in_month=days_in_month_for_status
-    )
+        status_txt, status_cls = get_status(
+            expense=expense_per_month,
+            income=income_per_month,
+            budget_total=budget_per_month,
+            days_elapsed=last_month_days,
+            days_in_month=full_month_days,
+        )
+    else:
+        status_txt, status_cls = get_status(expense_total, income_total)
+    
     
     k1, k2, k3, k4, k5 = st.columns(5)
     with k1:
