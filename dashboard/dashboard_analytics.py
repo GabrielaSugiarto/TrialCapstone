@@ -326,32 +326,26 @@ def main():
             <div class="sub">income + expense</div></div>""", unsafe_allow_html=True)
     with k5:
         status_config = {
-            "AMAN":    {"bg": "#1D9E75", "border": "#0F6E56", "text": "#ffffff", "icon": "✅", "sub_color": "rgba(255,255,255,0.8)"},
-            "WASPADA": {"bg": "#BA7517", "border": "#854F0B", "text": "#ffffff", "icon": "⚠️", "sub_color": "rgba(255,255,255,0.8)"},
-            "BAHAYA":  {"bg": "#A32D2D", "border": "#791F1F", "text": "#ffffff", "icon": "🚨", "sub_color": "rgba(255,255,255,0.8)"},
-            "BOROS":   {"bg": "#A32D2D", "border": "#791F1F", "text": "#ffffff", "icon": "🔥", "sub_color": "rgba(255,255,255,0.8)"},
-            "Tidak Ada Data": {"bg": "#888780", "border": "#5F5E5A", "text": "#ffffff", "icon": "❓", "sub_color": "rgba(255,255,255,0.8)"},
+            "AMAN":           {"bg": "#1D9E75", "border": "#0F6E56", "text": "#ffffff", "icon": "✅", "sub": "rgba(255,255,255,0.8)"},
+            "WASPADA":        {"bg": "#BA7517", "border": "#854F0B", "text": "#ffffff", "icon": "⚠️", "sub": "rgba(255,255,255,0.8)"},
+            "BAHAYA":         {"bg": "#A32D2D", "border": "#791F1F", "text": "#ffffff", "icon": "🚨", "sub": "rgba(255,255,255,0.8)"},
+            "BOROS":          {"bg": "#A32D2D", "border": "#791F1F", "text": "#ffffff", "icon": "🔥", "sub": "rgba(255,255,255,0.8)"},
+            "Tidak Ada Data": {"bg": "#888780", "border": "#5F5E5A", "text": "#ffffff", "icon": "❓", "sub": "rgba(255,255,255,0.8)"},
         }
         cfg = status_config.get(status_txt, status_config["WASPADA"])
         rasio = expense_total / max(income_total, 1) * 100
-        st.markdown(f"""
-            <div style="
-                background-color: {cfg['bg']} !important;
-                border: 2px solid {cfg['border']};
-                border-radius: 12px;
-                padding: 1rem 1.2rem;
-            ">
-                <div style="font-size:0.75rem; color:{cfg['sub_color']}; font-weight:600;">
-                    Status Keuangan
-                </div>
-                <div style="font-size:1.35rem; font-weight:700; margin-top:4px; color:{cfg['text']};">
-                    {cfg['icon']} {status_txt}
-                </div>
-                <div style="font-size:0.72rem; color:{cfg['sub_color']}; margin-top:2px;">
-                    Rasio: {rasio:.0f}%
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
+        html = (
+            f'<style>.kpi-status{{background:{cfg["bg"]}!important;border:2px solid {cfg["border"]};border-radius:12px;padding:1rem 1.2rem;}}'
+            f'.kpi-status .s-label{{font-size:0.75rem;color:{cfg["sub"]};font-weight:600;}}'
+            f'.kpi-status .s-value{{font-size:1.35rem;font-weight:700;margin-top:4px;color:{cfg["text"]};}}'
+            f'.kpi-status .s-sub{{font-size:0.72rem;color:{cfg["sub"]};margin-top:2px;}}</style>'
+            f'<div class="kpi-status">'
+            f'<div class="s-label">Status Keuangan</div>'
+            f'<div class="s-value">{cfg["icon"]} {status_txt}</div>'
+            f'<div class="s-sub">Rasio: {rasio:.0f}%</div>'
+            f'</div>'
+        )
+        st.markdown(html, unsafe_allow_html=True)
 
     # =========================================================================
     # CHART 1: Cashflow Bulanan
