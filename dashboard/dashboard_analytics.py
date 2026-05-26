@@ -335,7 +335,7 @@ def main():
         cfg = status_config.get(status_txt, status_config["WASPADA"])
         rasio = expense_total / max(income_total, 1) * 100
         html = (
-            f'<style>.kpi-status{{background:{cfg["bg"]}!important;border:2px solid {cfg["border"]};border-radius:12px;padding:1rem 1.2rem;}}'
+            f'<style>.kpi-status{{background:{cfg["bg"]}!important;border-radius:12px;padding:1rem 1.2rem;}}'
             f'.kpi-status .s-label{{font-size:0.75rem;color:{cfg["sub"]};font-weight:600;}}'
             f'.kpi-status .s-value{{font-size:1.35rem;font-weight:700;margin-top:4px;color:{cfg["text"]};}}'
             f'.kpi-status .s-sub{{font-size:0.72rem;color:{cfg["sub"]};margin-top:2px;}}</style>'
