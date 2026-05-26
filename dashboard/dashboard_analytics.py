@@ -298,25 +298,23 @@ def main():
         budget_this_month = 0
 
     days_in_period = (date_end - date_start).days + 1
-    num_months     = days_in_period / 30
 
-    if budget_this_month > 0 and num_months > 0:
-        expense_per_month = expense_total / num_months
-        budget_per_month  = budget_this_month / num_months
-        income_per_month  = income_total / num_months
-        last_month_days   = today.day
-        full_month_days   = calendar.monthrange(today.year, today.month)[1]
+    if budget_this_month > 0:
+        # Bulan berjalan: days_elapsed = hari yang sudah lewat sejak awal periode
+        if date_end >= today:
+            days_elapsed = (today - date_start).days + 1
+        else:
+            days_elapsed = days_in_period  # periode sudah lewat semua
 
         status_txt, status_cls = get_status(
-            expense=expense_per_month,
-            income=income_per_month,
-            budget_total=budget_per_month,
-            days_elapsed=last_month_days,
-            days_in_month=full_month_days,
+            expense=expense_total,
+            income=income_total,
+            budget_total=budget_this_month,
+            days_elapsed=days_elapsed,
+            days_in_month=days_in_period,
         )
     else:
         status_txt, status_cls = get_status(expense_total, income_total)
-    
     
     k1, k2, k3, k4, k5 = st.columns(5)
     with k1:
