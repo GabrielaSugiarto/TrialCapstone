@@ -300,14 +300,16 @@ def main():
     else:
         budget_this_month = 0
 
-    days_in_month  = calendar.monthrange(today.year, today.month)[1]
-    days_elapsed   = today.day
+    days_in_period = (date_end - date_start).days + 1
+    days_elapsed   = days_in_period  # seluruh periode sudah "berjalan"
+
+    days_in_month_for_status = days_in_period
 
     status_txt, status_cls = get_status(
         expense_total, income_total,
         budget_total=budget_this_month,
         days_elapsed=days_elapsed,
-        days_in_month=days_in_month
+        days_in_month=days_in_month_for_status
     )
     
     k1, k2, k3, k4, k5 = st.columns(5)
