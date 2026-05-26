@@ -290,14 +290,15 @@ def main():
 
     # Filter budget bulan ini
     if not df_budget.empty:
-        budget_this_month = df_budget[df_budget["month"] == current_month_str]["amount"].sum()
+        months_in_range = pd.period_range(
+            start=date_start.strftime("%Y-%m"),
+            end=date_end.strftime("%Y-%m"),
+            freq="M"
+        ).strftime("%Y-%m").tolist()
+    
+        budget_this_month = df_budget[df_budget["month"].isin(months_in_range)]["amount"].sum()
     else:
         budget_this_month = 0
-
-    # DEBUG - hapus setelah ketemu masalahnya
-    st.caption(f"DEBUG — current_month_str: {current_month_str}")
-    st.caption(f"DEBUG — budget_this_month: {budget_this_month}")
-    st.caption(f"DEBUG — df_budget months: {df_budget['month'].unique().tolist() if not df_budget.empty else 'EMPTY'}")
 
     days_in_month  = calendar.monthrange(today.year, today.month)[1]
     days_elapsed   = today.day
