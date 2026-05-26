@@ -326,15 +326,14 @@ def main():
             <div class="sub">income + expense</div></div>""", unsafe_allow_html=True)
     with k5:
         status_config = {
-            "AMAN":           {"bg": "#1D9E75", "text": "#ffffff", "icon": "✅", "sub": "rgba(255,255,255,0.8)"},
-            "WASPADA":        {"bg": "#BA7517", "text": "#ffffff", "icon": "⚠️", "sub": "rgba(255,255,255,0.8)"},
-            "BAHAYA":         {"bg": "#A32D2D", "text": "#ffffff", "icon": "🚨", "sub": "rgba(255,255,255,0.8)"},
-            "BOROS":          {"bg": "#A32D2D", "text": "#ffffff", "icon": "🔥", "sub": "rgba(255,255,255,0.8)"},
-            "Tidak Ada Data": {"bg": "#888780", "text": "#ffffff", "icon": "❓", "sub": "rgba(255,255,255,0.8)"},
+            "AMAN":           {"bg": "#1D9E75", "text": "#ffffff", "sub": "rgba(255,255,255,0.8)"},
+            "WASPADA":        {"bg": "#BA7517", "text": "#ffffff", "sub": "rgba(255,255,255,0.8)"},
+            "BAHAYA":         {"bg": "#A32D2D", "text": "#ffffff", "sub": "rgba(255,255,255,0.8)"},
+            "BOROS":          {"bg": "#A32D2D", "text": "#ffffff", "sub": "rgba(255,255,255,0.8)"},
+            "Tidak Ada Data": {"bg": "#888780", "text": "#ffffff","sub": "rgba(255,255,255,0.8)"},
         }
         cfg = status_config.get(status_txt, status_config["WASPADA"])
         rasio = expense_total / max(income_total, 1) * 100
-        font_size = "0.85rem" if status_txt == "Tidak Ada Data" else "1.35rem"
         html = (
             f'<style>'
             f'.kpi-status{{background:{cfg["bg"]}!important;border-radius:12px;padding:1rem 1.2rem;}}'
@@ -348,7 +347,7 @@ def main():
             f'</style>'
             f'<div class="kpi-status">'
             f'<div class="s-label">Status Keuangan</div>'
-            f'<div class="s-value">{cfg["icon"]} {status_txt}</div>'
+            f'<div class="s-value">{status_txt}</div>'
             f'<div class="s-sub">Rasio: {rasio:.0f}%</div>'
             f'</div>'
         )
