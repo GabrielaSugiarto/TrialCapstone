@@ -336,10 +336,16 @@ def main():
         rasio = expense_total / max(income_total, 1) * 100
         font_size = "0.85rem" if status_txt == "Tidak Ada Data" else "1.35rem"
         html = (
-            f'<style>.kpi-status{{background:{cfg["bg"]}!important;border-radius:12px;padding:1rem 1.2rem;}}'
+            f'<style>'
+            f'.kpi-status{{background:{cfg["bg"]}!important;border-radius:12px;padding:1rem 1.2rem;}}'
             f'.kpi-status .s-label{{font-size:0.75rem;color:{cfg["sub"]};font-weight:600;}}'
-            f'.kpi-status .s-value{{font-size:{font_size};font-weight:700;margin-top:4px;color:{cfg["text"]};}}'
-            f'.kpi-status .s-sub{{font-size:0.72rem;color:{cfg["sub"]};margin-top:2px;}}</style>'
+            f'.kpi-status .s-value{{'
+            f'  font-size:clamp(0.75rem, 2.2vw, 1.35rem);'
+            f'  font-weight:700;margin-top:4px;color:{cfg["text"]};'
+            f'  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'
+            f'}}'
+            f'.kpi-status .s-sub{{font-size:0.72rem;color:{cfg["sub"]};margin-top:2px;}}'
+            f'</style>'
             f'<div class="kpi-status">'
             f'<div class="s-label">Status Keuangan</div>'
             f'<div class="s-value">{cfg["icon"]} {status_txt}</div>'
