@@ -334,7 +334,7 @@ def main():
         }
         cfg = status_config.get(status_txt, status_config["WASPADA"])
         rasio = expense_total / max(income_total, 1) * 100
-        font_size = "1.05rem" if status_txt == "Tidak Ada Data" else "1.35rem"
+        font_size = "1.05rem" if status_txt == "Tidak Ada Data" else "1.75rem"
         html = (
             f'<style>.kpi-status{{background:{cfg["bg"]}!important;border-radius:12px;padding:1rem 1.2rem;}}'
             f'.kpi-status .s-label{{font-size:0.75rem;color:{cfg["sub"]};font-weight:600;}}'
