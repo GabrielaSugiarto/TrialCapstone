@@ -326,11 +326,11 @@ def main():
             <div class="sub">income + expense</div></div>""", unsafe_allow_html=True)
     with k5:
         status_config = {
-            "AMAN":           {"bg": "#1D9E75", "border": "#0F6E56", "text": "#ffffff", "icon": "✅", "sub": "rgba(255,255,255,0.8)"},
-            "WASPADA":        {"bg": "#BA7517", "border": "#854F0B", "text": "#ffffff", "icon": "⚠️", "sub": "rgba(255,255,255,0.8)"},
-            "BAHAYA":         {"bg": "#A32D2D", "border": "#791F1F", "text": "#ffffff", "icon": "🚨", "sub": "rgba(255,255,255,0.8)"},
-            "BOROS":          {"bg": "#A32D2D", "border": "#791F1F", "text": "#ffffff", "icon": "🔥", "sub": "rgba(255,255,255,0.8)"},
-            "Tidak Ada Data": {"bg": "#888780", "border": "#5F5E5A", "text": "#ffffff", "icon": "❓", "sub": "rgba(255,255,255,0.8)"},
+            "AMAN":           {"bg": "#1D9E75", "text": "#ffffff", "icon": "✅", "sub": "rgba(255,255,255,0.8)"},
+            "WASPADA":        {"bg": "#BA7517", "text": "#ffffff", "icon": "⚠️", "sub": "rgba(255,255,255,0.8)"},
+            "BAHAYA":         {"bg": "#A32D2D", "text": "#ffffff", "icon": "🚨", "sub": "rgba(255,255,255,0.8)"},
+            "BOROS":          {"bg": "#A32D2D", "text": "#ffffff", "icon": "🔥", "sub": "rgba(255,255,255,0.8)"},
+            "Tidak Ada Data": {"bg": "#888780", "text": "#ffffff", "icon": "❓", "sub": "rgba(255,255,255,0.8)"},
         }
         cfg = status_config.get(status_txt, status_config["WASPADA"])
         rasio = expense_total / max(income_total, 1) * 100
