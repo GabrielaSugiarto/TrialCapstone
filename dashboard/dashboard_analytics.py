@@ -54,19 +54,10 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-[data-testid="collapsedControl"] {
-    position: relative;
-}
-
-[data-testid="collapsedControl"]::after {
+[data-testid="stSidebarCollapsedControl"]::after {
     content: " Buka Filter";
     font-size: 13px;
     font-weight: 600;
-    color: white;
-    background: #0F6E56;
-    padding: 4px 10px;
-    border-radius: 8px;
-    margin-left: 6px;
 }
 </style>
 """, unsafe_allow_html=True)
