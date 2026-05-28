@@ -54,22 +54,6 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-[data-testid="stSidebarCollapsedControl"] {
-    padding-left: 2rem !important;
-}
-[data-testid="stIconMaterial"]::after {
-    content: "Buka Filter";
-    font-size: 13px;
-    font-weight: 600;
-    color: #0F6E56;
-    margin-left: 8px;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-}
-</style>
-""", unsafe_allow_html=True)
-
-st.markdown("""
-<style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap');
     html, body, [class*="css"] { font-family: 'Plus Jakarta Sans', sans-serif; }
     .header {
