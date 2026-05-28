@@ -217,17 +217,19 @@ def main():
             "Transportasi": "Tra"
         }
                 
-        selected_labels = sac.select(
-            items=[short_map.get(c, c[:3]) for c in exp_cats],
-            label="🏷️ Kategori",
-            index=list(range(len(exp_cats))),
-            multiple=True,
-            clearable=True,
-        )
-        selected_labels = selected_labels or []
-        reverse_map = {v: k for k, v in short_map.items()}
-        selected_cats = [reverse_map.get(l, l) for l in selected_labels]
-
+        semua = st.checkbox("Semua Kategori", value=True, key="all_cats")
+        if semua:
+            selected_cats = exp_cats
+        else:
+            selected_cats = st.multiselect(
+                "🏷️ Pilih Kategori",
+                options=exp_cats,
+                default=exp_cats,
+                format_func=lambda x: short_map.get(x, x[:3]),
+            )
+            if not selected_cats:  # fallback kalau kosong
+                selected_cats = exp_cats
+                
         st.markdown("---")
         st.caption(f"User ID: **{user_id}**")
         st.caption(f"Total data: **{len(df_all)} transaksi**")
