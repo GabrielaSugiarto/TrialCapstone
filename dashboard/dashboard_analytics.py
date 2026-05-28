@@ -207,16 +207,7 @@ def main():
 
         st.markdown("---")
         exp_cats      = sorted(df_all[df_all["type"] == "expense"]["category"].unique())
-
-        short_map = {
-            "Entertainment": "Ent",
-            "Kesehatan": "Kes",
-            "Konsumsi": "Kon",
-            "Langganan": "Lan",
-            "Tagihan": "Tag",
-            "Transportasi": "Tra"
-        }
-                
+               
         semua = st.checkbox("Semua Kategori", value=True, key="all_cats")
         if semua:
             selected_cats = exp_cats
@@ -224,8 +215,7 @@ def main():
             selected_cats = st.multiselect(
                 "🏷️ Pilih Kategori",
                 options=exp_cats,
-                default=exp_cats,
-                format_func=exp_cats,
+                default=exp_cats
             )
             if not selected_cats:  # fallback kalau kosong
                 selected_cats = exp_cats
