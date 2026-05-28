@@ -298,14 +298,16 @@ def main():
             remaining_days = days_in_month - day_of_month
             pct_label      = f"{spending_ratio*100:.0f}% terpakai"
 
-            if spending_ratio >= 1.0:
+            is_budget_used_too_fast = spending_ratio >= 0.8 and (day_of_month / days_in_month) < 0.8
+
+            if expense_total > total_budget_now or projected > total_budget_now * 1.2:
                 c_border = "#A32D2D"
                 c_bg     = "#FFF5F5"
                 c_label  = "BAHAYA"
                 c_text   = "Budget Terlampaui"
                 c_sub    = f"+{fmt(expense_total - total_budget_now)}"
                 c_clr    = "#A32D2D"
-            elif spending_ratio >= 0.8 or projected > total_budget_now:
+            elif projected > total_budget_now or is_budget_used_too_fast:
                 c_border = "#D4860A"
                 c_bg     = "#FFFBF0"
                 c_label  = "WASPADA"
