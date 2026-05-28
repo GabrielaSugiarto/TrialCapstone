@@ -393,7 +393,7 @@ def main():
     # =========================================================================
     # CHART 3: Donut + Metode Pembayaran
     # =========================================================================
-    col_a, col_b = st.columns([3, 7])
+    col_a, col_b = st.columns([4, 6])
     with col_a:
         st.subheader("Komposisi Pengeluaran")
         if not df_exp.empty:
