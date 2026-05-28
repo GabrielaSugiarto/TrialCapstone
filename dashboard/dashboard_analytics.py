@@ -426,7 +426,7 @@ def main():
                 font=dict(size=13, family="Plus Jakarta Sans")
             )
             fig3.update_layout(
-                height=360, margin=dict(l=0, r=0, t=10, b=0),
+                height=320, margin=dict(l=0, r=0, t=10, b=0),
                 showlegend=False,
                 plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
             )
