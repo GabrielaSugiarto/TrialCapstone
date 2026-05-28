@@ -153,7 +153,7 @@ def main():
     # ── Sidebar ───────────────────────────────────────────────────────────────
     with st.sidebar:
         st.image(str(logo_path), width=180)
-        st.markdown("### Dashboard Analitik Transaksi")
+        st.markdown("##### Dashboard Analitik Transaksi")
         st.markdown("---")
 
         filter_mode = st.selectbox(
