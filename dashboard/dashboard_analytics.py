@@ -221,8 +221,7 @@ def main():
             default=exp_cats,
             format_func=lambda x: short_map.get(x, x[:3])
         )
-        st.write(selected_cats)
-        
+                
         st.markdown("---")
         st.caption(f"User ID: **{user_id}**")
         st.caption(f"Total data: **{len(df_all)} transaksi**")
