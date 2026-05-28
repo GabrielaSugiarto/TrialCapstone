@@ -206,7 +206,7 @@ def main():
 
         st.markdown("---")
         exp_cats      = sorted(df_all[df_all["type"] == "expense"]["category"].unique())
-        selected_cats = st.multiselect("🏷️ Kategori", exp_cats, default=exp_cats)
+        selected_cats = st.pills("🏷️ Kategori", exp_cats, default=exp_cats)
         st.markdown("---")
         st.caption(f"User ID: **{user_id}**")
         st.caption(f"Total data: **{len(df_all)} transaksi**")
@@ -622,7 +622,7 @@ def main():
                     unsafe_allow_html=True
                 )
 
-        with st.pills("Lihat semua kategori"):
+        with st.expander("Lihat semua kategori"):
             tb = df_boros.copy()
             tb["Periode Ini"]  = tb["cur"].apply(fmt)
             tb["Periode Lalu"] = tb["prev"].apply(lambda x: fmt(x) if x > 0 else "-")
