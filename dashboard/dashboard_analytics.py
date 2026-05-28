@@ -41,7 +41,7 @@ st.set_page_config(
     page_title="SAWIT - Transaksi",
     page_icon="🌴",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="auto",
 )
 
 st.markdown("""
@@ -234,6 +234,7 @@ def main():
             date_start = period_obj.start_time.date()
             date_end   = period_obj.end_time.date()
             period     = f"{selected_month_name} {selected_year}"
+            is_monthly_filter = True
 
         else:  # Rentang Tanggal
             col_d1, col_d2 = st.columns(2)
@@ -262,9 +263,14 @@ def main():
     df     = pd.concat([df_inc, df_exp])
 
     # ── Periode sebelumnya (untuk deteksi terboros) ───────────────────────────
-    delta_days  = (date_end - date_start).days + 1
-    prev_end    = date_start - timedelta(days=1)
-    prev_start  = prev_end - timedelta(days=delta_days - 1)
+    if filter_mode == "Bulan Tertentu":
+        prev_period = pd.Period(f"{selected_year}-{selected_month_num:02d}", freq="M") - 1
+        prev_start  = prev_period.start_time.date()
+        prev_end    = prev_period.end_time.date()
+    else:
+        delta_days = (date_end - date_start).days + 1
+        prev_end   = date_start - timedelta(days=1)
+        prev_start = prev_end - timedelta(days=delta_days - 1)
     df_prev_exp = df_all[
         (df_all["date"].dt.date >= prev_start) &
         (df_all["date"].dt.date <= prev_end) &
@@ -592,6 +598,7 @@ def main():
     # SECTION: Deteksi Kategori Terboros
     # =========================================================================
     st.subheader("Deteksi Kategori Terboros")
+    st.caption(f"Dibandingkan dengan: {prev_label}")
 
     if not df_exp.empty:
         cur_cat    = df_exp.groupby("category")["amount"].sum()
@@ -639,7 +646,6 @@ def main():
                 )
 
         with st.expander("Lihat semua kategori"):
-            st.caption(f"Dibandingkan dengan: {prev_label}")
             tb = df_boros.copy()
             tb["Periode Ini"]  = tb["cur"].apply(fmt)
             tb["Periode Lalu"] = tb["prev"].apply(lambda x: fmt(x) if x > 0 else "-")
