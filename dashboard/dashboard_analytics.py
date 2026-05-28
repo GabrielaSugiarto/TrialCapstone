@@ -41,7 +41,7 @@ st.set_page_config(
     page_title="SAWIT - Transaksi",
     page_icon="🌴",
     layout="wide",
-    initial_sidebar_state="auto",
+    initial_sidebar_state="collapsed",
 )
 
 st.markdown("""
@@ -73,46 +73,6 @@ def fmt(amount: float) -> str:
     elif amount >= 1_000:
         return f"Rp {amount/1_000:.0f}rb"
     return f"Rp {amount:,.0f}"
-
-
-def get_status(expense, income, budget_total=0, days_elapsed=0, days_in_month=30):
-    """
-    Status berdasarkan 3 faktor:
-    - Rasio expense/income
-    - Sisa budget (jika ada data budget)
-    - Kecepatan pengeluaran (apakah sudah > 80% budget sebelum bulan habis)
-    """
-    if income == 0:
-        return "Tidak Ada Data", "status-waspada"
-    
-    r = expense / income
-    
-    # Jika ada data budget, cek kecepatan pengeluaran
-    if budget_total > 0 and days_in_month > 0:
-        budget_used_pct = expense / budget_total  # % budget terpakai
-        month_elapsed_pct = days_elapsed / days_in_month  # % bulan berjalan
-        
-        # Proyeksi pengeluaran akhir bulan
-        if days_elapsed > 0:
-            projected = expense / days_elapsed * days_in_month
-            projected_pct = projected / budget_total
-        else:
-            projected_pct = 0
-        
-        # Boros jika sudah pakai >80% budget sebelum 80% bulan berjalan
-        if budget_used_pct >= 0.80 and month_elapsed_pct < 0.80:
-            return "BOROS", "status-bahaya"
-        # Waspada jika proyeksi akhir bulan melebihi budget
-        if projected_pct > 1.10:
-            return "WASPADA", "status-waspada"
-    
-    # Fallback ke rasio expense/income
-    if r <= 0.60:
-        return "AMAN", "status-aman"
-    elif r <= 0.80:
-        return "WASPADA", "status-waspada"
-    return "BAHAYA", "status-bahaya"
-
 
 import requests
 @st.cache_data(ttl=30)
@@ -188,7 +148,7 @@ def main():
         st.caption("Dashboard Analitik Transaksi")
         st.markdown("---")
 
-        filter_mode = st.radio(
+        filter_mode = st.selectbox(
             "📅 Filter Periode",
             options=["Semua Data", "7 Hari Terakhir", "30 Hari Terakhir",
                      "90 Hari Terakhir", "Bulan Tertentu", "Rentang Tanggal"],
@@ -524,9 +484,9 @@ def main():
                 is_current  = bulan_str == current_month_str
 
                 expander_label = (
-                    f"{status_icon} {'🔵 ' if is_current else ''}"
+                    f"{status_icon} {'▶ Bulan Ini · ' if is_current else ''}"
                     f"**{label_bulan}** — "
-                    f"{fmt(total_actual)} / {fmt(total_budget)} "
+                    f"terpakai {fmt(total_actual)} dari {fmt(total_budget)} "
                     f"({pct_total:.0f}%)"
                 )
 
@@ -662,7 +622,7 @@ def main():
                     unsafe_allow_html=True
                 )
 
-        with st.expander("Lihat semua kategori"):
+        with st.pills("Lihat semua kategori"):
             tb = df_boros.copy()
             tb["Periode Ini"]  = tb["cur"].apply(fmt)
             tb["Periode Lalu"] = tb["prev"].apply(lambda x: fmt(x) if x > 0 else "-")
