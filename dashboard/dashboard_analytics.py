@@ -217,14 +217,12 @@ def main():
             "Transportasi": "Tra"
         }
                 
-        selected_labels = sac.chip(
-            items=[sac.ChipItem(label=short_map.get(c, c[:3])) for c in exp_cats],
-            index=list(range(len(exp_cats))),
+        selected_labels = sac.select(
+            items=[short_map.get(c, c[:3]) for c in exp_cats],
             label="🏷️ Kategori",
+            index=list(range(len(exp_cats))),
             multiple=True,
-            radius="md",
-            variant="filled",
-            color="green",
+            clearable=True,
         )
         selected_labels = selected_labels or []
         reverse_map = {v: k for k, v in short_map.items()}
