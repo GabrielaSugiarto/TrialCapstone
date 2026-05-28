@@ -574,7 +574,7 @@ def main():
                             badge      = f"{pct:.0f}% terpakai"
                             s_bg, s_fg = "#FAEEDA", "#854F0B"
                         else:
-                            bar_color  = CATEGORY_COLORS.get(cat, "#1D9E75")
+                            bar_color  = "#1D9E75"
                             badge      = f"{pct:.0f}% terpakai"
                             s_bg, s_fg = "#E1F5EE", "#0F6E56"
 
