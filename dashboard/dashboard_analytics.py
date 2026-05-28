@@ -305,6 +305,24 @@ def main():
         days_elapsed=days_elapsed,
         days_in_month=days_in_month
     )
+
+    with st.expander("🔍 Debug Status Keuangan", expanded=False):
+        st.write({
+            "filter_mode": filter_mode,
+            "date_start": str(date_start),
+            "date_end": str(date_end),
+            "days_in_period": days_in_period,
+            "days_elapsed": days_elapsed,
+            "is_single_month": is_single_month,
+            "income_total": income_total,
+            "expense_total": expense_total,
+            "budget_prorata": budget_prorata,
+            "budget_dipass": budget_prorata if is_single_month else 0,
+            "rasio_expense_income": round(expense_total / max(income_total, 1), 3),
+            "rasio_expense_budget": round(expense_total / max(budget_prorata, 1), 3),
+            "time_progress": round(days_elapsed / max(days_in_period, 1), 3),
+            "status": status_txt,
+        })
     
     k1, k2, k3, k4, k5 = st.columns(5)
     with k1:
