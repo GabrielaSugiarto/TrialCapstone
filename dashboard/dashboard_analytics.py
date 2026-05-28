@@ -160,7 +160,7 @@ def main():
             "📅 Filter Periode",
             options=[ "Bulan Ini", "7 Hari Terakhir", "30 Hari Terakhir",
                      "90 Hari Terakhir", "Bulan Tertentu", "Rentang Tanggal", "Semua Data"],
-            index=6,
+            index=0,
         )
 
         if filter_mode == "Semua Data":
