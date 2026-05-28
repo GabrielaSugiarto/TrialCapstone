@@ -416,7 +416,10 @@ def main():
                 values=cat_sum["amount"],
                 hole=0.55,
                 marker=dict(colors=[CATEGORY_COLORS.get(c, "#888780") for c in cat_sum["category"]]),
-                textinfo="none",
+                textinfo="label+percent",
+                textposition="outside",
+                outsidetextfont=dict(size=11, family="Plus Jakarta Sans"),
+                pull=[0] * len(cat_sum),
                 hovertemplate="<b>%{label}</b><br>Rp %{value:,.0f} (%{percent})<extra></extra>",
             ))
             fig3.add_annotation(
@@ -425,16 +428,9 @@ def main():
                 font=dict(size=13, family="Plus Jakarta Sans")
             )
             fig3.update_layout(
-                height=380, margin=dict(l=0, r=0, t=10, b=0),
-                showlegend=True,
-                legend=dict(
-                    orientation="h",
-                    y=-0.15,
-                    x=0.5,
-                    xanchor="center",
-                    font=dict(size=11, family="Plus Jakarta Sans"),
-                    itemwidth=80,
-                ),
+                height=420,
+                margin=dict(l=80, r=80, t=30, b=30),
+                showlegend=False,
                 plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
             )
             st.plotly_chart(fig3, use_container_width=True)
