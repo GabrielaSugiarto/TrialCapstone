@@ -73,60 +73,40 @@ def fmt(amount: float) -> str:
     elif amount >= 1_000:
         return f"Rp {amount/1_000:.0f}rb"
     return f"Rp {amount:,.0f}"
-    
-def get_budget_prorata(df_budget, date_start, date_end, category=None):
-    """Hitung budget prorata untuk rentang tanggal. Opsional filter per kategori."""
-    total_prorata = 0
-    current = date_start.replace(day=1)
 
-    while current <= date_end:
-        year, month = current.year, current.month
-        days_in_month = calendar.monthrange(year, month)[1]
-        overlap_start = max(date_start, current)
-        overlap_end   = min(date_end, current.replace(day=days_in_month))
-        days_overlap  = (overlap_end - overlap_start).days + 1
-
-        month_str  = current.strftime("%Y-%m")
-        budget_row = df_budget[df_budget["month"] == month_str]
-        if category:
-            budget_row = budget_row[budget_row["category"] == category]
-        if not budget_row.empty:
-            total_prorata += budget_row["amount"].sum() * (days_overlap / days_in_month)
-
-        current = (current.replace(day=28) + timedelta(days=4)).replace(day=1)
-
-    return total_prorata
 
 def get_status(expense, income, budget_total=0, days_elapsed=0, days_in_month=30):
     """
-    Status berdasarkan logika calculate_warning_metrics() dari backend:
-    - BAHAYA  : expense > budget ATAU proyeksi > budget * 1.2
-    - WASPADA : proyeksi > budget ATAU sudah pakai >=80% budget sebelum 80% bulan berjalan
-    - AMAN    : selain kondisi di atas
-    Fallback ke rasio expense/income jika tidak ada data budget.
+    Status berdasarkan 3 faktor:
+    - Rasio expense/income
+    - Sisa budget (jika ada data budget)
+    - Kecepatan pengeluaran (apakah sudah > 80% budget sebelum bulan habis)
     """
     if income == 0:
         return "Tidak Ada Data", "status-waspada"
-
-    # ── Jika ada data budget, pakai logika backend ────────────────────────────
-    if budget_total > 0 and days_in_month > 0:
-        safe_day          = max(days_elapsed, 1)
-        safe_days         = max(days_in_month, safe_day)
-        time_progress     = safe_day / safe_days
-        spending_ratio    = expense / budget_total
-        daily_average     = expense / safe_day
-        projected         = daily_average * safe_days
-        is_too_fast       = spending_ratio >= 0.80 and time_progress < 0.80
-
-        if expense > budget_total or projected > budget_total * 1.2:
-            return "BAHAYA", "status-bahaya"
-        elif projected > budget_total or is_too_fast:
-            return "WASPADA", "status-waspada"
-        else:
-            return "AMAN", "status-aman"
-
-    # ── Fallback: tidak ada budget, pakai rasio expense/income ────────────────
+    
     r = expense / income
+    
+    # Jika ada data budget, cek kecepatan pengeluaran
+    if budget_total > 0 and days_in_month > 0:
+        budget_used_pct = expense / budget_total  # % budget terpakai
+        month_elapsed_pct = days_elapsed / days_in_month  # % bulan berjalan
+        
+        # Proyeksi pengeluaran akhir bulan
+        if days_elapsed > 0:
+            projected = expense / days_elapsed * days_in_month
+            projected_pct = projected / budget_total
+        else:
+            projected_pct = 0
+        
+        # Boros jika sudah pakai >80% budget sebelum 80% bulan berjalan
+        if budget_used_pct >= 0.80 and month_elapsed_pct < 0.80:
+            return "BOROS", "status-bahaya"
+        # Waspada jika proyeksi akhir bulan melebihi budget
+        if projected_pct > 1.10:
+            return "WASPADA", "status-waspada"
+    
+    # Fallback ke rasio expense/income
     if r <= 0.60:
         return "AMAN", "status-aman"
     elif r <= 0.80:
@@ -306,19 +286,24 @@ def main():
     saldo         = income_total - expense_total
     savings_pct   = (saldo / income_total * 100) if income_total > 0 else 0
 
+    # Hitung parameter budget untuk bulan yang sedang dilihat
     today = date.today()
+    current_month_str = today.strftime("%Y-%m")
 
-    # Filter budget sesuai rentang periode
-    days_in_period = (date_end - date_start).days + 1
-    days_elapsed   = min((today - date_start).days + 1, days_in_period)
-    budget_prorata = get_budget_prorata(df_budget, date_start, date_end) if not df_budget.empty else 0
+    # Filter budget bulan ini
+    if not df_budget.empty:
+        budget_this_month = df_budget[df_budget["month"] == current_month_str]["amount"].sum()
+    else:
+        budget_this_month = 0
+
+    days_in_month  = calendar.monthrange(today.year, today.month)[1]
+    days_elapsed   = today.day
 
     status_txt, status_cls = get_status(
-        expense=expense_total,
-        income=income_total,
-        budget_total=budget_prorata,
+        expense_total, income_total,
+        budget_total=budget_this_month,
         days_elapsed=days_elapsed,
-        days_in_month=days_in_period,
+        days_in_month=days_in_month
     )
     
     k1, k2, k3, k4, k5 = st.columns(5)
@@ -341,41 +326,32 @@ def main():
             <div class="sub">income + expense</div></div>""", unsafe_allow_html=True)
     with k5:
         status_config = {
-            "AMAN":           {"bg": "#1D9E75", "text": "#ffffff", "sub": "rgba(255,255,255,0.8)"},
-            "WASPADA":        {"bg": "#BA7517", "text": "#ffffff", "sub": "rgba(255,255,255,0.8)"},
-            "BAHAYA":         {"bg": "#A32D2D", "text": "#ffffff", "sub": "rgba(255,255,255,0.8)"},
-            "BOROS":          {"bg": "#A32D2D", "text": "#ffffff", "sub": "rgba(255,255,255,0.8)"},
-            "Tidak Ada Data": {"bg": "#888780", "text": "#ffffff","sub": "rgba(255,255,255,0.8)"},
+            "AMAN":    {"bg": "#E1F5EE", "border": "#1D9E75", "text": "#085041", "icon": "✅", "sub_color": "#0F6E56"},
+            "WASPADA": {"bg": "#FAEEDA", "border": "#BA7517", "text": "#633806", "icon": "⚠️", "sub_color": "#854F0B"},
+            "BAHAYA":  {"bg": "#FCEBEB", "border": "#A32D2D", "text": "#501313", "icon": "🚨", "sub_color": "#791F1F"},
+            "BOROS":   {"bg": "#FCEBEB", "border": "#A32D2D", "text": "#501313", "icon": "🔥", "sub_color": "#791F1F"},
+            "Tidak Ada Data": {"bg": "#F1EFE8", "border": "#888780", "text": "#2C2C2A", "icon": "❓", "sub_color": "#5F5E5A"},
         }
         cfg = status_config.get(status_txt, status_config["WASPADA"])
         rasio = expense_total / max(income_total, 1) * 100
-        html = (
-            f'<style>'
-            f'.kpi-status{{background:{cfg["bg"]}!important;border-radius:12px;padding:1rem 1.2rem;}}'
-            f'.kpi-status .s-label{{font-size:0.75rem;color:{cfg["sub"]};font-weight:600;}}'
-            f'.kpi-status .s-value{{'
-            f'  font-size:clamp(0.75rem, 2.2vw, 1.35rem);'
-            f'  font-weight:700;margin-top:4px;color:{cfg["text"]};'
-            f'  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;'
-            f'}}'
-            f'.kpi-status .s-sub{{font-size:0.72rem;color:{cfg["sub"]};margin-top:2px;}}'
-            f'</style>'
-            f'<div class="kpi-status">'
-            f'<div class="s-label">Status Keuangan</div>'
-            f'<div class="s-value">{status_txt}</div>'
-            f'<div class="s-sub">Rasio: {rasio:.0f}%</div>'
-            f'</div>'
-        )
-        st.markdown(html, unsafe_allow_html=True)
-        st.write({
-            "expense": expense_total,
-            "budget_prorata": budget_prorata,
-            "days_elapsed": days_elapsed,
-            "days_in_month": days_in_period,
-            "time_progress": days_elapsed / days_in_period,
-            "spending_ratio": expense_total / max(budget_prorata, 1),
-        })
-
+        st.markdown(f"""
+            <div style="
+                background-color: {cfg['bg']} !important;
+                border: 2px solid {cfg['border']};
+                border-radius: 12px;
+                padding: 1rem 1.2rem;
+            ">
+                <div style="font-size:0.75rem; color:{cfg['sub_color']}; font-weight:600;">
+                    Status Keuangan
+                </div>
+                <div style="font-size:1.35rem; font-weight:700; margin-top:4px; color:{cfg['text']};">
+                    {cfg['icon']} {status_txt}
+                </div>
+                <div style="font-size:0.72rem; color:{cfg['sub_color']}; margin-top:2px;">
+                    Rasio: {rasio:.0f}%
+                </div>
+            </div>
+        """, unsafe_allow_html=True)
 
     # =========================================================================
     # CHART 1: Cashflow Bulanan
@@ -518,11 +494,15 @@ def main():
             cat_bar = df_exp.groupby("category")["amount"].sum().reset_index().sort_values("amount", ascending=False)
 
             if not df_budget.empty:
-                budget_map = {}
-                for cat in cat_bar["category"]:
-                    prorata = get_budget_prorata(df_budget, date_start, date_end, category=cat)
-                    if prorata > 0:
-                        budget_map[cat] = prorata
+                # ── Ambil semua bulan dalam rentang filter, bukan cuma bulan ini ──
+                months_in_range = pd.period_range(
+                    start=date_start.strftime("%Y-%m"),
+                    end=date_end.strftime("%Y-%m"),
+                    freq="M"
+                ).strftime("%Y-%m").tolist()
+
+                budget_range = df_budget[df_budget["month"].isin(months_in_range)]
+                budget_map   = budget_range.groupby("category")["amount"].sum().to_dict()
             else:
                 budget_map = {}
 
@@ -729,6 +709,6 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
-    
+
 if __name__ == "__main__":
     main()
