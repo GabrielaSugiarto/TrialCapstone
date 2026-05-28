@@ -42,7 +42,7 @@ METHOD_COLORS = {
     "E-Wallet": "#7F77DD",
 }
 
-logo_path = "https://raw.github.com/GabrielaSugiarto/TrialCapstone/blob/main/dashboard/logo-sawit.png"
+logo_path = "https://raw.githubusercontent.com/GabrielaSugiarto/TrialCapstone/main/dashboard/logo-sawit.png"
 
 st.set_page_config(
     page_title="SAWIT - Transaksi",
