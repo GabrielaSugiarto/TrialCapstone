@@ -41,13 +41,11 @@ METHOD_COLORS = {
     "E-Wallet": "#7F77DD",
 }
 
-logo_url = "https://raw.githubusercontent.com/maxrumbo/CapstoneProject_CC26-PSU329/development/client/public/logo-sawit.png"
-response = requests.get(logo_url)
-logo = Image.open(BytesIO(response.content))
+logo_path = Path(__file__).parent / "logo-sawit.png"
 
 st.set_page_config(
     page_title="SAWIT - Transaksi",
-    page_icon=logo,
+    page_icon=Image.open(logo_path),
     layout="wide",
     initial_sidebar_state="collapsed",
 )
