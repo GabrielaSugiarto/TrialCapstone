@@ -511,7 +511,7 @@ def main():
                 )
 
                 if filter_mode == "Bulan Tertentu":
-                    st.markdown(f"### {expander_label}")
+                    st.markdown(f"##### {expander_label}")
                     container = st.container()
                 else:
                     container = st.expander(expander_label, expanded=is_current)
