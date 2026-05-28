@@ -73,30 +73,6 @@ def fmt(amount: float) -> str:
     elif amount >= 1_000:
         return f"Rp {amount/1_000:.0f}rb"
     return f"Rp {amount:,.0f}"
-
-def get_budget_prorata(df_budget, date_start, date_end, category=None):
-    """Hitung budget prorata untuk rentang tanggal. Opsional filter per kategori."""
-    import calendar
-    total_prorata = 0
-    current = date_start.replace(day=1)
-
-    while current <= date_end:
-        year, month = current.year, current.month
-        days_in_month = calendar.monthrange(year, month)[1]
-        overlap_start = max(date_start, current)
-        overlap_end   = min(date_end, current.replace(day=days_in_month))
-        days_overlap  = (overlap_end - overlap_start).days + 1
-
-        month_str  = current.strftime("%Y-%m")
-        budget_row = df_budget[df_budget["month"] == month_str]
-        if category:
-            budget_row = budget_row[budget_row["category"] == category]
-        if not budget_row.empty:
-            total_prorata += budget_row["amount"].sum() * (days_overlap / days_in_month)
-
-        current = (current.replace(day=28) + timedelta(days=4)).replace(day=1)
-
-    return total_prorata
     
 def get_status(expense, income, budget_total=0, days_elapsed=0, days_in_month=30):
     """
@@ -721,6 +697,14 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
+    st.write({
+        "expense": expense_total,
+        "budget_prorata": budget_prorata,
+        "days_elapsed": days_elapsed,
+        "days_in_month": days_in_period,
+        "time_progress": days_elapsed / days_in_period,
+        "spending_ratio": expense_total / max(budget_prorata, 1),
+    })
 
 if __name__ == "__main__":
     main()
