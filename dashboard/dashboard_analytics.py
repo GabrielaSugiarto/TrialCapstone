@@ -206,7 +206,8 @@ def main():
 
         st.markdown("---")
         exp_cats      = sorted(df_all[df_all["type"] == "expense"]["category"].unique())
-        category_map = {
+
+        short_map = {
             "Entertainment": "Ent",
             "Kesehatan": "Kes",
             "Konsumsi": "Kon",
@@ -216,11 +217,11 @@ def main():
         }
         selected_cats = st.multiselect(
             "🏷️ Kategori", 
-            options=list(category_map.values()), 
-            default=list(category_map.values())
+            options=categories, 
+            default=categories,
+            format_func=lambda x: f"{x} ({short_map[x]})"
         )
-        reverse_map = {v: k for k, v in category_map.items()}
-        selected_full = [reverse_map[x] for x in selected_cats]  
+        st.write(selected_cats)
         
         st.markdown("---")
         st.caption(f"User ID: **{user_id}**")
