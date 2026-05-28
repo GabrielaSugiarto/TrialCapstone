@@ -375,7 +375,7 @@ def main():
     with k4:    
         st.markdown(f"""<div class="kpi"><div class="label">Total Transaksi</div>
             <div class="value" style="color:#7F77DD">{len(df)}</div>
-            <div class="sub">Pemasukan dan Pengeluaran</div></div>""", unsafe_allow_html=True)
+            <div class="sub">Pemasukan & Pengeluaran</div></div>""", unsafe_allow_html=True)
 
     # =========================================================================
     # CHART 1: Cashflow Bulanan
