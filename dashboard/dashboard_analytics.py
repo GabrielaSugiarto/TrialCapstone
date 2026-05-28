@@ -303,21 +303,18 @@ def main():
                 c_bg     = "#FFF5F5"
                 c_label  = "BAHAYA"
                 c_text   = "Budget Terlampaui"
-                c_sub    = f"Over {fmt(expense_total - total_budget_now)}"
                 c_clr    = "#A32D2D"
             elif spending_ratio >= 0.8 or projected > total_budget_now:
                 c_border = "#D4860A"
                 c_bg     = "#FFFBF0"
                 c_label  = "WASPADA"
                 c_text   = "Budget Menipis"
-                c_sub    = f"Sisa {fmt(total_budget_now - expense_total)}"
                 c_clr    = "#854F0B"
             else:
                 c_border = "#1D9E75"
                 c_bg     = "#F0FBF7"
                 c_label  = "AMAN"
                 c_text   = "Keuangan Sehat"
-                c_sub    = f"Sisa {fmt(total_budget_now - expense_total)}"
                 c_clr    = "#0F6E56"
 
             budget_badge_html = (
