@@ -411,41 +411,25 @@ def main():
                 .sum().reset_index()
                 .sort_values("amount", ascending=False)
             )
-            donut_col, legend_col = st.columns([3, 2])
-            with donut_col:
-                fig3 = go.Figure(go.Pie(
-                    labels=cat_sum["category"],
-                    values=cat_sum["amount"],
-                    hole=0.55,
-                    marker=dict(colors=[CATEGORY_COLORS.get(c, "#888780") for c in cat_sum["category"]]),
-                    textinfo="none",
-                    hovertemplate="<b>%{label}</b><br>Rp %{value:,.0f} (%{percent})<extra></extra>",
-                ))
-                fig3.add_annotation(
-                    text=f"<b>{fmt(expense_total)}</b>",
-                    x=0.5, y=0.5, showarrow=False,
-                    font=dict(size=13, family="Plus Jakarta Sans")
-                )
-                fig3.update_layout(
-                    height=320, margin=dict(l=0, r=0, t=10, b=0),
-                    showlegend=False,
-                    plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
-                )
-                st.plotly_chart(fig3, use_container_width=True)
-
-            with legend_col:
-                st.markdown("<div style='height:60px'></div>", unsafe_allow_html=True)
-                for _, row in cat_sum.iterrows():
-                    pct = row["amount"] / expense_total * 100
-                    color = CATEGORY_COLORS.get(row["category"], "#888780")
-                    st.markdown(
-                        f'<div style="display:flex;align-items:center;gap:8px;margin-bottom:10px">'
-                        f'<div style="width:12px;height:12px;border-radius:3px;background:{color};flex-shrink:0"></div>'
-                        f'<div style="font-size:0.82rem;color:#1a1a1a;font-weight:500">{row["category"]}</div>'
-                        f'<div style="font-size:0.82rem;color:#888;margin-left:auto">{pct:.1f}%</div>'
-                        f'</div>',
-                        unsafe_allow_html=True
-                    )
+            fig3 = go.Figure(go.Pie(
+                labels=cat_sum["category"],
+                values=cat_sum["amount"],
+                hole=0.55,
+                marker=dict(colors=[CATEGORY_COLORS.get(c, "#888780") for c in cat_sum["category"]]),
+                textinfo="percent+label",
+                textfont_size=11,
+                hovertemplate="<b>%{label}</b><br>Rp %{value:,.0f} (%{percent})<extra></extra>",
+            ))
+            fig3.add_annotation(
+                text=f"<b>{fmt(expense_total)}</b>",
+                x=0.5, y=0.5, showarrow=False,
+                font=dict(size=13, family="Plus Jakarta Sans")
+            )
+            fig3.update_layout(
+                height=360, margin=dict(l=0, r=0, t=10, b=0),
+                showlegend=False,
+                plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
+            )
             st.plotly_chart(fig3, use_container_width=True)
 
     with col_b:
