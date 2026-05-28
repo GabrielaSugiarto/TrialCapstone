@@ -288,43 +288,52 @@ def main():
         current_month_str = today.strftime("%Y-%m")
         budget_bulan      = df_budget[df_budget["month"] == current_month_str]
         total_budget_now  = budget_bulan["amount"].sum()
-            
-        if spending_ratio >= 1.0:
-            c_border = "#A32D2D"
-            c_bg     = "#FFF5F5"
-            c_label  = "BAHAYA"
-            c_text   = "Budget Terlampaui"
-            c_sub    = f"Over {fmt(expense_total - total_budget_now)}"
-            c_clr    = "#A32D2D"
-        elif spending_ratio >= 0.8 or projected > total_budget_now:
-            c_border = "#D4860A"
-            c_bg     = "#FFFBF0"
-            c_label  = "WASPADA"
-            c_text   = "Budget Menipis"
-            c_sub    = f"Sisa {fmt(total_budget_now - expense_total)}"
-            c_clr    = "#854F0B"
-        else:
-            c_border = "#1D9E75"
-            c_bg     = "#F0FBF7"
-            c_label  = "AMAN"
-            c_text   = "Keuangan Sehat"
-            c_sub    = f"Sisa {fmt(total_budget_now - expense_total)}"
-            c_clr    = "#0F6E56"
 
-        budget_badge_html = (
-            f'<div style="background:{c_bg};border:2px solid {c_border};border-radius:14px;'
-            f'padding:18px 20px;text-align:center;">'
-            f'<div style="font-size:0.68rem;font-weight:600;color:{c_clr};letter-spacing:2px;'
-            f'text-transform:uppercase;opacity:0.75;">Status Keuangan</div>'
-            f'<div style="font-size:1.7rem;font-weight:800;color:{c_clr};'
-            f'letter-spacing:4px;margin:4px 0;">{c_label}</div>'
-            f'<div style="width:36px;height:2px;background:{c_border};'
-            f'margin:8px auto;border-radius:2px;"></div>'
-            f'<div style="font-size:0.78rem;font-weight:600;color:{c_clr};">{c_text}</div>'
-            f'<div style="font-size:0.72rem;color:{c_clr};opacity:0.70;margin-top:3px;">{c_sub}</div>'
-            f'<div style="font-size:0.68rem;color:{c_clr};opacity:0.55;margin-top:2px;">{pct_label}</div>'
-            f'</div>'
-        )
+        if total_budget_now > 0:
+            day_of_month   = today.day
+            days_in_month  = calendar.monthrange(today.year, today.month)[1]
+            spending_ratio = expense_total / total_budget_now
+            daily_avg      = expense_total / max(day_of_month, 1)
+            projected      = daily_avg * days_in_month
+            remaining_days = days_in_month - day_of_month
+            pct_label      = f"{spending_ratio*100:.0f}% terpakai"
+
+            if spending_ratio >= 1.0:
+                c_border = "#A32D2D"
+                c_bg     = "#FFF5F5"
+                c_label  = "BAHAYA"
+                c_text   = "Budget Terlampaui"
+                c_sub    = f"Over {fmt(expense_total - total_budget_now)}"
+                c_clr    = "#A32D2D"
+            elif spending_ratio >= 0.8 or projected > total_budget_now:
+                c_border = "#D4860A"
+                c_bg     = "#FFFBF0"
+                c_label  = "WASPADA"
+                c_text   = "Budget Menipis"
+                c_sub    = f"Sisa {fmt(total_budget_now - expense_total)}"
+                c_clr    = "#854F0B"
+            else:
+                c_border = "#1D9E75"
+                c_bg     = "#F0FBF7"
+                c_label  = "AMAN"
+                c_text   = "Keuangan Sehat"
+                c_sub    = f"Sisa {fmt(total_budget_now - expense_total)}"
+                c_clr    = "#0F6E56"
+
+            budget_badge_html = (
+                f'<div style="background:{c_bg};border:2px solid {c_border};border-radius:14px;'
+                f'padding:18px 20px;text-align:center;">'
+                f'<div style="font-size:0.68rem;font-weight:600;color:{c_clr};letter-spacing:2px;'
+                f'text-transform:uppercase;opacity:0.75;">Status Keuangan</div>'
+                f'<div style="font-size:1.7rem;font-weight:800;color:{c_clr};'
+                f'letter-spacing:4px;margin:4px 0;">{c_label}</div>'
+                f'<div style="width:36px;height:2px;background:{c_border};'
+                f'margin:8px auto;border-radius:2px;"></div>'
+                f'<div style="font-size:0.78rem;font-weight:600;color:{c_clr};">{c_text}</div>'
+                f'<div style="font-size:0.72rem;color:{c_clr};opacity:0.70;margin-top:3px;">{c_sub}</div>'
+                f'<div style="font-size:0.68rem;color:{c_clr};opacity:0.55;margin-top:2px;">{pct_label}</div>'
+                f'</div>'
+            )
 
     # ── Header ────────────────────────────────────────────────────────────────
     if budget_badge_html:
