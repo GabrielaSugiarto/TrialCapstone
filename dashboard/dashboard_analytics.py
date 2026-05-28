@@ -323,15 +323,15 @@ def main():
             budget_badge_html = (
                 f'<div style="background:{c_bg};border:2px solid {c_border};border-radius:14px;'
                 f'padding:8px 10px;text-align:center;min-width:0;">'
-                f'<div style="font-size:0.68rem;font-weight:600;color:{c_clr};letter-spacing:2px;'
+                f'<div style="font-size:0.68rem;font-weight:600;color:{c_clr};letter-spacing:1px;'
                 f'text-transform:uppercase;opacity:0.75;">Status Keuangan</div>'
                 f'<div style="font-size:1.7rem;font-weight:800;color:{c_clr};'
-                f'letter-spacing:2px;margin:2px 0;">{c_label}</div>'
+                f'letter-spacing:2px;margin:1px 0;">{c_label}</div>'
                 f'<div style="width:36px;height:2px;background:{c_border};'
-                f'margin:2px auto;border-radius:2px;"></div>'
+                f'margin:1px auto;border-radius:1px;"></div>'
                 f'<div style="font-size:0.78rem;font-weight:600;color:{c_clr};">{c_text}</div>'
-                f'<div style="font-size:0.72rem;color:{c_clr};opacity:0.70;margin-top:2px;">{c_sub}</div>'
-                f'<div style="font-size:0.68rem;color:{c_clr};opacity:0.55;margin-top:2px;">{pct_label}</div>'
+                f'<div style="font-size:0.72rem;color:{c_clr};opacity:0.70;margin-top:1.5px;">{c_sub}</div>'
+                f'<div style="font-size:0.68rem;color:{c_clr};opacity:0.55;margin-top:1.5px;">{pct_label}</div>'
                 f'</div>'
             )
 
