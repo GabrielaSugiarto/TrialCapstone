@@ -310,15 +310,15 @@ def main():
                 b_brd   = "rgba(239,159,39,0.50)"
                 b_clr   = "#FFD580"
                 b_label = "WASPADA"
-                b_text  = "Hampir Habis"
-                b_sub   = f"Proyeksi {fmt(projected)}"
+                b_text  = "Budget Menipis"
+                b_sub   = f"Budget Sisa {fmt(total_budget_now - expense_total)}"
             else:
                 b_bg    = "rgba(255,255,255,0.15)"
                 b_brd   = "rgba(255,255,255,0.35)"
                 b_clr   = "#FFFFFF"
                 b_label = "AMAN"
                 b_text  = "Keuangan Sehat"
-                b_sub   = f"Sisa {fmt(total_budget_now - expense_total)}"
+                b_sub   = f"Budget Sisa {fmt(total_budget_now - expense_total)}"
 
             budget_badge_html = (
                 f'<div style="background:{b_bg};border:1px solid {b_brd};border-radius:12px;'
