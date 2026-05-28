@@ -74,7 +74,30 @@ def fmt(amount: float) -> str:
         return f"Rp {amount/1_000:.0f}rb"
     return f"Rp {amount:,.0f}"
 
+def get_budget_prorata(df_budget, date_start, date_end, category=None):
+    """Hitung budget prorata untuk rentang tanggal. Opsional filter per kategori."""
+    import calendar
+    total_prorata = 0
+    current = date_start.replace(day=1)
 
+    while current <= date_end:
+        year, month = current.year, current.month
+        days_in_month = calendar.monthrange(year, month)[1]
+        overlap_start = max(date_start, current)
+        overlap_end   = min(date_end, current.replace(day=days_in_month))
+        days_overlap  = (overlap_end - overlap_start).days + 1
+
+        month_str  = current.strftime("%Y-%m")
+        budget_row = df_budget[df_budget["month"] == month_str]
+        if category:
+            budget_row = budget_row[budget_row["category"] == category]
+        if not budget_row.empty:
+            total_prorata += budget_row["amount"].sum() * (days_overlap / days_in_month)
+
+        current = (current.replace(day=28) + timedelta(days=4)).replace(day=1)
+
+    return total_prorata
+    
 def get_status(expense, income, budget_total=0, days_elapsed=0, days_in_month=30):
     """
     Status berdasarkan logika calculate_warning_metrics() dari backend:
@@ -287,34 +310,17 @@ def main():
     today = date.today()
 
     # Filter budget sesuai rentang periode
-    if not df_budget.empty:
-        months_in_range = pd.period_range(
-            start=date_start.strftime("%Y-%m"),
-            end=date_end.strftime("%Y-%m"),
-            freq="M"
-        ).strftime("%Y-%m").tolist()
-        budget_this_month = df_budget[df_budget["month"].isin(months_in_range)]["amount"].sum()
-    else:
-        budget_this_month = 0
-
     days_in_period = (date_end - date_start).days + 1
+    days_elapsed   = min((today - date_start).days + 1, days_in_period)
+    budget_prorata = get_budget_prorata(df_budget, date_start, date_end) if not df_budget.empty else 0
 
-    if budget_this_month > 0:
-        # Bulan berjalan: days_elapsed = hari yang sudah lewat sejak awal periode
-        if date_end >= today:
-            days_elapsed = (today - date_start).days + 1
-        else:
-            days_elapsed = days_in_period  # periode sudah lewat semua
-
-        status_txt, status_cls = get_status(
-            expense=expense_total,
-            income=income_total,
-            budget_total=budget_this_month,
-            days_elapsed=days_elapsed,
-            days_in_month=days_in_period,
-        )
-    else:
-        status_txt, status_cls = get_status(expense_total, income_total)
+    status_txt, status_cls = get_status(
+        expense=expense_total,
+        income=income_total,
+        budget_total=budget_prorata,
+        days_elapsed=days_elapsed,
+        days_in_month=days_in_period,
+    )
     
     k1, k2, k3, k4, k5 = st.columns(5)
     with k1:
@@ -504,15 +510,11 @@ def main():
             cat_bar = df_exp.groupby("category")["amount"].sum().reset_index().sort_values("amount", ascending=False)
 
             if not df_budget.empty:
-                # ── Ambil semua bulan dalam rentang filter, bukan cuma bulan ini ──
-                months_in_range = pd.period_range(
-                    start=date_start.strftime("%Y-%m"),
-                    end=date_end.strftime("%Y-%m"),
-                    freq="M"
-                ).strftime("%Y-%m").tolist()
-
-                budget_range = df_budget[df_budget["month"].isin(months_in_range)]
-                budget_map   = budget_range.groupby("category")["amount"].sum().to_dict()
+                budget_map = {}
+                for cat in cat_bar["category"]:
+                    prorata = get_budget_prorata(df_budget, date_start, date_end, category=cat)
+                    if prorata > 0:
+                        budget_map[cat] = prorata
             else:
                 budget_map = {}
 
