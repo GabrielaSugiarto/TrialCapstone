@@ -285,44 +285,8 @@ def main():
     expense_total = df_exp["amount"].sum()
     saldo         = income_total - expense_total
     savings_pct   = (saldo / income_total * 100) if income_total > 0 else 0
-
-    # Hitung parameter budget untuk bulan yang sedang dilihat
-    today = date.today()
-    current_month_str = today.strftime("%Y-%m")
-
-    # Filter budget bulan ini
-    if not df_budget.empty:
-        budget_this_month = df_budget[df_budget["month"] == current_month_str]["amount"].sum()
-    else:
-        budget_this_month = 0
-
-    days_in_month  = calendar.monthrange(today.year, today.month)[1]
-    days_elapsed   = today.day
-
-    status_txt, status_cls = get_status(
-        expense_total, income_total,
-        budget_total=budget_this_month,
-        days_elapsed=days_elapsed,
-        days_in_month=days_in_month
-    )
-
-    with st.expander("🔍 Debug Status Keuangan", expanded=False):
-        st.write({
-            "filter_mode": filter_mode,
-            "date_start": str(date_start),
-            "date_end": str(date_end),
-            "days_elapsed": days_elapsed,
-            "days_in_month": days_in_month,
-            "time_progress": round(days_elapsed / max(days_in_month, 1), 3),
-            "income_total": income_total,
-            "expense_total": expense_total,
-            "budget_this_month": budget_this_month,
-            "rasio_expense_income": round(expense_total / max(income_total, 1), 3),
-            "rasio_expense_budget": round(expense_total / max(budget_this_month, 1), 3),
-            "status": status_txt,
-        })
     
-    k1, k2, k3, k4, k5 = st.columns(5)
+    k1, k2, k3, k4 = st.columns(4)
     with k1:
         st.markdown(f"""<div class="kpi"><div class="label">Pemasukan</div>
             <div class="value" style="color:#1D9E75">{fmt(income_total)}</div>
@@ -340,34 +304,6 @@ def main():
         st.markdown(f"""<div class="kpi"><div class="label">Total Transaksi</div>
             <div class="value" style="color:#7F77DD">{len(df)}</div>
             <div class="sub">income + expense</div></div>""", unsafe_allow_html=True)
-    with k5:
-        status_config = {
-            "AMAN":    {"bg": "#E1F5EE", "border": "#1D9E75", "text": "#085041", "icon": "✅", "sub_color": "#0F6E56"},
-            "WASPADA": {"bg": "#FAEEDA", "border": "#BA7517", "text": "#633806", "icon": "⚠️", "sub_color": "#854F0B"},
-            "BAHAYA":  {"bg": "#FCEBEB", "border": "#A32D2D", "text": "#501313", "icon": "🚨", "sub_color": "#791F1F"},
-            "BOROS":   {"bg": "#FCEBEB", "border": "#A32D2D", "text": "#501313", "icon": "🔥", "sub_color": "#791F1F"},
-            "Tidak Ada Data": {"bg": "#F1EFE8", "border": "#888780", "text": "#2C2C2A", "icon": "❓", "sub_color": "#5F5E5A"},
-        }
-        cfg = status_config.get(status_txt, status_config["WASPADA"])
-        rasio = expense_total / max(income_total, 1) * 100
-        st.markdown(f"""
-            <div style="
-                background-color: {cfg['bg']} !important;
-                border: 2px solid {cfg['border']};
-                border-radius: 12px;
-                padding: 1rem 1.2rem;
-            ">
-                <div style="font-size:0.75rem; color:{cfg['sub_color']}; font-weight:600;">
-                    Status Keuangan
-                </div>
-                <div style="font-size:1.35rem; font-weight:700; margin-top:4px; color:{cfg['text']};">
-                    {cfg['icon']} {status_txt}
-                </div>
-                <div style="font-size:0.72rem; color:{cfg['sub_color']}; margin-top:2px;">
-                    Rasio: {rasio:.0f}%
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
 
     # =========================================================================
     # CHART 1: Cashflow Bulanan
