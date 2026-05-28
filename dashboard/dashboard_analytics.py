@@ -284,12 +284,7 @@ def main():
     )
 
     budget_badge_html = ""
-    if show_budget_warning and not df_budget.empty:
-        current_month_str = today.strftime("%Y-%m")
-        budget_bulan      = df_budget[df_budget["month"] == current_month_str]
-        total_budget_now  = budget_bulan["amount"].sum()
-
-        if total_budget_now > 0:
+    if total_budget_now > 0:
             day_of_month   = today.day
             days_in_month  = calendar.monthrange(today.year, today.month)[1]
             spending_ratio = expense_total / total_budget_now
@@ -299,34 +294,35 @@ def main():
             pct_label      = f"{spending_ratio*100:.0f}% terpakai"
 
             if spending_ratio >= 1.0:
-                b_bg   = "rgba(163,45,45,0.30)"
-                b_brd  = "rgba(255,160,160,0.45)"
-                b_clr  = "#FFB3B3"
-                b_icon = "🚨"
-                b_text = "Budget Bahaya"
-                b_sub  = f"Lewat {fmt(expense_total - total_budget_now)}"
+                b_bg    = "rgba(163,45,45,0.30)"
+                b_brd   = "rgba(255,160,160,0.45)"
+                b_clr   = "#FFB3B3"
+                b_label = "BAHAYA"
+                b_text  = "Budget Terlampaui"
+                b_sub   = f"+{fmt(expense_total - total_budget_now)}"
             elif spending_ratio >= 0.8 or projected > total_budget_now:
-                b_bg   = "rgba(239,159,39,0.28)"
-                b_brd  = "rgba(239,159,39,0.50)"
-                b_clr  = "#FFD580"
-                b_icon = "⚠️"
-                b_text = "Perlu Waspada"
-                b_sub  = f"Proyeksi {fmt(projected)}"
+                b_bg    = "rgba(239,159,39,0.28)"
+                b_brd   = "rgba(239,159,39,0.50)"
+                b_clr   = "#FFD580"
+                b_label = "WASPADA"
+                b_text  = "Hampir Habis"
+                b_sub   = f"Proyeksi {fmt(projected)}"
             else:
-                b_bg   = "rgba(255,255,255,0.15)"
-                b_brd  = "rgba(255,255,255,0.35)"
-                b_clr  = "#FFFFFF"
-                b_icon = "✅"
-                b_text = "Keuangan Aman"
-                b_sub  = f"Sisa {fmt(total_budget_now - expense_total)}"
+                b_bg    = "rgba(255,255,255,0.15)"
+                b_brd   = "rgba(255,255,255,0.35)"
+                b_clr   = "#FFFFFF"
+                b_label = "AMAN"
+                b_text  = "Keuangan Sehat"
+                b_sub   = f"Sisa {fmt(total_budget_now - expense_total)}"
 
             budget_badge_html = (
                 f'<div style="background:{b_bg};border:1px solid {b_brd};border-radius:12px;'
-                f'padding:10px 18px;text-align:center;min-width:155px;">'
-                f'<div style="font-size:1.3rem;">{b_icon}</div>'
-                f'<div style="font-weight:700;color:{b_clr};font-size:0.88rem;margin-top:4px;">{b_text}</div>'
-                f'<div style="font-size:0.70rem;color:rgba(255,255,255,0.70);margin-top:2px;">{b_sub}</div>'
-                f'<div style="font-size:0.68rem;color:rgba(255,255,255,0.55);margin-top:1px;">{pct_label}</div>'
+                f'padding:12px 20px;text-align:center;min-width:155px;">'
+                f'<div style="font-size:1.5rem;font-weight:800;color:{b_clr};letter-spacing:3px;">{b_label}</div>'
+                f'<div style="width:100%;height:1px;background:rgba(255,255,255,0.2);margin:6px 0;"></div>'
+                f'<div style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.85);">{b_text}</div>'
+                f'<div style="font-size:0.70rem;color:rgba(255,255,255,0.60);margin-top:2px;">{b_sub}</div>'
+                f'<div style="font-size:0.68rem;color:rgba(255,255,255,0.50);margin-top:1px;">{pct_label}</div>'
                 f'</div>'
             )
 
