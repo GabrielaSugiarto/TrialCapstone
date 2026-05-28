@@ -218,6 +218,7 @@ def main():
             "🏷️ Kategori", 
             options=list(category_map.values()), 
             default=list(category_map.values())
+        )
         reverse_map = {v: k for k, v in category_map.items()}
         selected_full = [reverse_map[x] for x in selected_cats]  
         
