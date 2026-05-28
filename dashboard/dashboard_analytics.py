@@ -54,17 +54,17 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-[data-testid="stSidebarCollapsedControl"] {
+[data-testid="stIconMaterial"] {
     display: flex;
     align-items: center;
-    gap: 6px;
 }
-[data-testid="stSidebarCollapsedControl"]::after {
+[data-testid="stIconMaterial"]::after {
     content: "Buka Filter";
     font-size: 13px;
     font-weight: 600;
     color: #0F6E56;
-    white-space: nowrap;
+    margin-left: 6px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 </style>
 """, unsafe_allow_html=True)
