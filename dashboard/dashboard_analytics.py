@@ -320,26 +320,27 @@ def main():
                 b_text = "Keuangan Aman"
                 b_sub  = f"Sisa {fmt(total_budget_now - expense_total)}"
 
-            budget_badge_html = f"""
-            <div style="background:{b_bg};border:1px solid {b_brd};border-radius:12px;
-                    padding:10px 18px;text-align:center;min-width:155px">
-                <div style="font-size:1.3rem;line-height:1">{b_icon}</div>
-                <div style="font-weight:700;color:{b_clr};font-size:0.88rem;margin-top:4px">{b_text}</div>
-                <div style="font-size:0.70rem;color:rgba(255,255,255,0.70);margin-top:2px">{b_sub}</div>
-                <div style="font-size:0.68rem;color:rgba(255,255,255,0.55);margin-top:1px">{pct_label}</div>
-            </div>
-            """
+            budget_badge_html = (
+                f'<div style="background:{b_bg};border:1px solid {b_brd};border-radius:12px;'
+                f'padding:10px 18px;text-align:center;min-width:155px;">'
+                f'<div style="font-size:1.3rem;">{b_icon}</div>'
+                f'<div style="font-weight:700;color:{b_clr};font-size:0.88rem;margin-top:4px;">{b_text}</div>'
+                f'<div style="font-size:0.70rem;color:rgba(255,255,255,0.70);margin-top:2px;">{b_sub}</div>'
+                f'<div style="font-size:0.68rem;color:rgba(255,255,255,0.55);margin-top:1px;">{pct_label}</div>'
+                f'</div>'
+            )
 
     # ── Header ────────────────────────────────────────────────────────────────
-    st.markdown(f"""
-    <div class="header" style="display:flex;justify-content:space-between;align-items:center">
-        <div>
-            <h1>Dashboard Analitik Transaksi</h1>
-            <p>Periode: {period} &nbsp;·&nbsp; {datetime.now().strftime('%d %b %Y, %H:%M')}</p>
-        </div>
-        {budget_badge_html}
-    </div>
-    """, unsafe_allow_html=True)
+    st.markdown(
+        f'<div class="header" style="display:flex;justify-content:space-between;align-items:center;">'
+        f'<div>'
+        f'<h1>Dashboard Analitik Transaksi</h1>'
+        f'<p>Periode: {period} &nbsp;·&nbsp; {datetime.now().strftime("%d %b %Y, %H:%M")}</p>'
+        f'</div>'
+        f'{budget_badge_html}'
+        f'</div>',
+        unsafe_allow_html=True
+    )
 
     k1, k2, k3, k4 = st.columns(4)
     with k1:
@@ -577,7 +578,7 @@ def main():
                     f"({pct_total:.0f}%)"
                 )
 
-                if filter_mode == ("Bulan Tertentu","Bulan Ini"):
+                if filter_mode in ("Bulan Tertentu","Bulan Ini"):
                     st.markdown(f"##### {expander_label}")
                     container = st.container()
                 else:
