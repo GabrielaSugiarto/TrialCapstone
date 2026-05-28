@@ -217,8 +217,8 @@ def main():
         }
         selected_cats = st.multiselect(
             "🏷️ Kategori", 
-            options=categories, 
-            default=categories,
+            options=exp_cats, 
+            default=exp_cats,
             format_func=lambda x: f"{x} ({short_map[x]})"
         )
         st.write(selected_cats)
