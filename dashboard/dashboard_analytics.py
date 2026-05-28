@@ -46,7 +46,7 @@ logo_path = "https://raw.githubusercontent.com/maxrumbo/CapstoneProject_CC26-PSU
 
 st.set_page_config(
     page_title="SAWIT - Transaksi",
-    page_icon=Image.open(logo_path),
+    page_icon=logo_path,
     layout="wide",
     initial_sidebar_state="collapsed",
 )
