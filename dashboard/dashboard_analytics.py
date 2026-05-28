@@ -322,11 +322,11 @@ def main():
 
             budget_badge_html = (
                 f'<div style="background:{c_bg};border:2px solid {c_border};border-radius:14px;'
-                f'padding:18px 20px;text-align:center;">'
+                f'padding:18px 10px;text-align:center;min-width:0;">'
                 f'<div style="font-size:0.68rem;font-weight:600;color:{c_clr};letter-spacing:2px;'
                 f'text-transform:uppercase;opacity:0.75;">Status Keuangan</div>'
                 f'<div style="font-size:1.7rem;font-weight:800;color:{c_clr};'
-                f'letter-spacing:4px;margin:4px 0;">{c_label}</div>'
+                f'letter-spacing:2px;margin:4px 0;">{c_label}</div>'
                 f'<div style="width:36px;height:2px;background:{c_border};'
                 f'margin:8px auto;border-radius:2px;"></div>'
                 f'<div style="font-size:0.78rem;font-weight:600;color:{c_clr};">{c_text}</div>'
