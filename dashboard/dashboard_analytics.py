@@ -289,59 +289,67 @@ def main():
         budget_bulan      = df_budget[df_budget["month"] == current_month_str]
         total_budget_now  = budget_bulan["amount"].sum()
 
-        if total_budget_now > 0:
-            day_of_month   = today.day
-            days_in_month  = calendar.monthrange(today.year, today.month)[1]
-            spending_ratio = expense_total / total_budget_now
-            daily_avg      = expense_total / max(day_of_month, 1)
-            projected      = daily_avg * days_in_month
-            remaining_days = days_in_month - day_of_month
-            pct_label      = f"{spending_ratio*100:.0f}% terpakai"
-
             if spending_ratio >= 1.0:
-                b_bg    = "rgba(163,45,45,0.30)"
-                b_brd   = "rgba(255,160,160,0.45)"
-                b_clr   = "#FFB3B3"
-                b_label = "BAHAYA"
-                b_text  = "Budget Terlampaui"
-                b_sub   = f"+{fmt(expense_total - total_budget_now)}"
+                c_border = "#A32D2D"
+                c_bg     = "#FFF5F5"
+                c_label  = "BAHAYA"
+                c_text   = "Budget Terlampaui"
+                c_sub    = f"Over {fmt(expense_total - total_budget_now)}"
+                c_clr    = "#A32D2D"
             elif spending_ratio >= 0.8 or projected > total_budget_now:
-                b_bg    = "rgba(239,159,39,0.28)"
-                b_brd   = "rgba(239,159,39,0.50)"
-                b_clr   = "#FFD580"
-                b_label = "WASPADA"
-                b_text  = "Budget Menipis"
-                b_sub   = f"Budget Sisa {fmt(total_budget_now - expense_total)}"
+                c_border = "#D4860A"
+                c_bg     = "#FFFBF0"
+                c_label  = "WASPADA"
+                c_text   = "Budget Menipis"
+                c_sub    = f"Sisa {fmt(total_budget_now - expense_total)}"
+                c_clr    = "#854F0B"
             else:
-                b_bg    = "rgba(255,255,255,0.15)"
-                b_brd   = "rgba(255,255,255,0.35)"
-                b_clr   = "#FFFFFF"
-                b_label = "AMAN"
-                b_text  = "Keuangan Sehat"
-                b_sub   = f"Budget Sisa {fmt(total_budget_now - expense_total)}"
+                c_border = "#1D9E75"
+                c_bg     = "#F0FBF7"
+                c_label  = "AMAN"
+                c_text   = "Keuangan Sehat"
+                c_sub    = f"Sisa {fmt(total_budget_now - expense_total)}"
+                c_clr    = "#0F6E56"
 
             budget_badge_html = (
-                f'<div style="background:{b_bg};border:1px solid {b_brd};border-radius:12px;'
-                f'padding:12px 20px;text-align:center;min-width:155px;">'
-                f'<div style="font-size:1.5rem;font-weight:800;color:{b_clr};letter-spacing:3px;">{b_label}</div>'
-                f'<div style="width:100%;height:1px;background:rgba(255,255,255,0.2);margin:6px 0;"></div>'
-                f'<div style="font-size:0.75rem;font-weight:600;color:rgba(255,255,255,0.85);">{b_text}</div>'
-                f'<div style="font-size:0.70rem;color:rgba(255,255,255,0.60);margin-top:2px;">{b_sub}</div>'
-                f'<div style="font-size:0.68rem;color:rgba(255,255,255,0.50);margin-top:1px;">{pct_label}</div>'
+                f'<div style="background:{c_bg};border:2px solid {c_border};border-radius:14px;'
+                f'padding:18px 20px;text-align:center;">'
+                f'<div style="font-size:0.68rem;font-weight:600;color:{c_clr};letter-spacing:2px;'
+                f'text-transform:uppercase;opacity:0.75;">Status Keuangan</div>'
+                f'<div style="font-size:1.7rem;font-weight:800;color:{c_clr};'
+                f'letter-spacing:4px;margin:4px 0;">{c_label}</div>'
+                f'<div style="width:36px;height:2px;background:{c_border};'
+                f'margin:8px auto;border-radius:2px;"></div>'
+                f'<div style="font-size:0.78rem;font-weight:600;color:{c_clr};">{c_text}</div>'
+                f'<div style="font-size:0.72rem;color:{c_clr};opacity:0.70;margin-top:3px;">{c_sub}</div>'
+                f'<div style="font-size:0.68rem;color:{c_clr};opacity:0.55;margin-top:2px;">{pct_label}</div>'
                 f'</div>'
             )
 
     # ── Header ────────────────────────────────────────────────────────────────
-    st.markdown(
-        f'<div class="header" style="display:flex;justify-content:space-between;align-items:center;">'
-        f'<div>'
-        f'<h1>Dashboard Analitik Transaksi</h1>'
-        f'<p>Periode: {period} &nbsp;·&nbsp; {datetime.now().strftime("%d %b %Y, %H:%M")}</p>'
-        f'</div>'
-        f'{budget_badge_html}'
-        f'</div>',
-        unsafe_allow_html=True
-    )
+    if budget_badge_html:
+        col_header, col_status = st.columns([3, 1])
+        with col_header:
+            st.markdown(
+                f'<div class="header">'
+                f'<h1>Dashboard Analitik Transaksi</h1>'
+                f'<p>Periode: {period} &nbsp;·&nbsp; {datetime.now().strftime("%d %b %Y, %H:%M")}</p>'
+                f'</div>',
+                unsafe_allow_html=True
+            )
+        with col_status:
+            st.markdown(
+                f'<div style="padding-top:4px;">{budget_badge_html}</div>',
+                unsafe_allow_html=True
+            )
+    else:
+        st.markdown(
+            f'<div class="header">'
+            f'<h1>Dashboard Analitik Transaksi</h1>'
+            f'<p>Periode: {period} &nbsp;·&nbsp; {datetime.now().strftime("%d %b %Y, %H:%M")}</p>'
+            f'</div>',
+            unsafe_allow_html=True
+        )
 
     k1, k2, k3, k4 = st.columns(4)
     with k1:
