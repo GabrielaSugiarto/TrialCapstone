@@ -42,11 +42,12 @@ METHOD_COLORS = {
     "E-Wallet": "#7F77DD",
 }
 
+logo_path_s = "https://raw.githubusercontent.com/GabrielaSugiarto/TrialCapstone/main/dashboard/logo-sawit%20s%20doang.png"
 logo_path = "https://raw.githubusercontent.com/GabrielaSugiarto/TrialCapstone/main/dashboard/logo-sawit.png"
 
 st.set_page_config(
     page_title="SAWIT - Transaksi",
-    page_icon=logo_path,
+    page_icon=logo_path_s,
     layout="wide",
     initial_sidebar_state="collapsed",
 )
@@ -152,8 +153,7 @@ def main():
     # ── Sidebar ───────────────────────────────────────────────────────────────
     with st.sidebar:
         st.image(str(logo_path), width=180)
-        st.markdown("### 🌴 SAWIT")
-        st.caption("Dashboard Analitik Transaksi")
+        st.markdown("### Dashboard Analitik Transaksi")
         st.markdown("---")
 
         filter_mode = st.selectbox(
