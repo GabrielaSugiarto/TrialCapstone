@@ -510,7 +510,13 @@ def main():
                     f"({pct_total:.0f}%)"
                 )
 
-                with st.expander(expander_label, expanded=is_current):
+                if filter_mode == "Bulan Tertentu":
+                    st.markdown(f"### {expander_label}")
+                    container = st.container()
+                else:
+                    container = st.expander(expander_label, expanded=is_current)
+
+                with container:
                     bar_color_total = "#A32D2D" if pct_total >= 100 else ("#EF9F27" if pct_total >= 80 else "#1D9E75")
                     sisa_total = max(total_budget - total_actual, 0)
                     over_total = max(total_actual - total_budget, 0)
