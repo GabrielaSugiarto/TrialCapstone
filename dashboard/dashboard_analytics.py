@@ -206,7 +206,11 @@ def main():
 
         st.markdown("---")
         exp_cats      = sorted(df_all[df_all["type"] == "expense"]["category"].unique())
-        selected_cats = st.pills("🏷️ Kategori", exp_cats, default=exp_cats)
+        selected_cats = st.pills(
+            "🏷️ Kategori", 
+            options=exp_cats, 
+            default=exp_cats,
+            selection_mode='multi')
         st.markdown("---")
         st.caption(f"User ID: **{user_id}**")
         st.caption(f"Total data: **{len(df_all)} transaksi**")
