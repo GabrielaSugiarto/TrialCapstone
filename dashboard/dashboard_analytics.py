@@ -225,7 +225,7 @@ def main():
                 "🏷️ Pilih Kategori",
                 options=exp_cats,
                 default=exp_cats,
-                format_func=lambda x: short_map.get(x, x[:3]),
+                format_func=exp_cats,
             )
             if not selected_cats:  # fallback kalau kosong
                 selected_cats = exp_cats
