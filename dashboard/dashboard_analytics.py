@@ -216,20 +216,17 @@ def main():
             "Tagihan": "Tag",
             "Transportasi": "Tra"
         }
-        selected_indices = sac.chip(
-            items=[
-                sac.ChipItem(label=short_map.get(c, c[:3]), icon="tag")
-                for c in exp_cats
-            ],
+        selected_labels = sac.checkbox(
+            items=[short_map.get(c, c[:3]) for c in exp_cats],
             label="🏷️ Kategori",
-            index=list(range(len(exp_cats))),   # semua selected by default
-            multiple=True,
-            radius="md",
-            variant="filled",
+            check_all=True,
+            check_all_label="Semua",
         )
-        reverse_map = {v: k for k, v in short_map.items()}
-        selected_cats = [reverse_map.get(label, label) for label in (selected_labels or [])]
-        
+        selected_cats = [
+            c for c in exp_cats 
+            if short_map.get(c, c[:3]) in selected_labels
+        ]
+
         st.markdown("---")
         st.caption(f"User ID: **{user_id}**")
         st.caption(f"Total data: **{len(df_all)} transaksi**")
