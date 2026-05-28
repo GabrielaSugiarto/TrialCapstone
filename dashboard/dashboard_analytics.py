@@ -209,8 +209,7 @@ def main():
         selected_cats = st.multiselect(
             "🏷️ Kategori", 
             options=exp_cats, 
-            default=exp_cats,
-            selection_mode='multi')
+            default=exp_cats)
         st.markdown("---")
         st.caption(f"User ID: **{user_id}**")
         st.caption(f"Total data: **{len(df_all)} transaksi**")
