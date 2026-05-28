@@ -17,6 +17,9 @@ import pandas as pd
 import plotly.graph_objects as go
 from dotenv import load_dotenv
 import calendar
+import requests                          
+from PIL import Image
+from io import BytesIO
 import streamlit_antd_components as sac
 
 load_dotenv()
