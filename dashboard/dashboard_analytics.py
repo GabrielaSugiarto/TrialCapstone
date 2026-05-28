@@ -269,20 +269,78 @@ def main():
         (df_all["category"].isin(selected_cats))
     ]
 
-    # ── Header ────────────────────────────────────────────────────────────────
-    st.markdown(f"""
-    <div class="header">
-        <h1>Dashboard Analitik Transaksi</h1>
-        <p>Periode: {period} &nbsp;·&nbsp; {datetime.now().strftime('%d %b %Y, %H:%M')}</p>
-    </div>
-    """, unsafe_allow_html=True)
-
-    # ── KPI ───────────────────────────────────────────────────────────────────
+    # ── Kalkulasi KPI (dipindah ke atas supaya bisa dipakai badge) ────────────
     income_total  = df_inc["amount"].sum()
     expense_total = df_exp["amount"].sum()
     saldo         = income_total - expense_total
     savings_pct   = (saldo / income_total * 100) if income_total > 0 else 0
-    
+
+    # ── Budget Warning Badge ──────────────────────────────────────────────────
+    show_budget_warning = (
+        filter_mode == "Bulan Ini" or
+        (filter_mode == "Bulan Tertentu" and
+         date_start.year == today.year and
+         date_start.month == today.month)
+    )
+
+    budget_badge_html = ""
+    if show_budget_warning and not df_budget.empty:
+        current_month_str = today.strftime("%Y-%m")
+        budget_bulan      = df_budget[df_budget["month"] == current_month_str]
+        total_budget_now  = budget_bulan["amount"].sum()
+
+        if total_budget_now > 0:
+            day_of_month   = today.day
+            days_in_month  = calendar.monthrange(today.year, today.month)[1]
+            spending_ratio = expense_total / total_budget_now
+            daily_avg      = expense_total / max(day_of_month, 1)
+            projected      = daily_avg * days_in_month
+            remaining_days = days_in_month - day_of_month
+            pct_label      = f"{spending_ratio*100:.0f}% terpakai"
+
+            if spending_ratio >= 1.0:
+                b_bg   = "rgba(163,45,45,0.30)"
+                b_brd  = "rgba(255,160,160,0.45)"
+                b_clr  = "#FFB3B3"
+                b_icon = "🚨"
+                b_text = "Budget Bahaya"
+                b_sub  = f"Lewat {fmt(expense_total - total_budget_now)}"
+            elif spending_ratio >= 0.8 or projected > total_budget_now:
+                b_bg   = "rgba(239,159,39,0.28)"
+                b_brd  = "rgba(239,159,39,0.50)"
+                b_clr  = "#FFD580"
+                b_icon = "⚠️"
+                b_text = "Perlu Waspada"
+                b_sub  = f"Proyeksi {fmt(projected)}"
+            else:
+                b_bg   = "rgba(255,255,255,0.15)"
+                b_brd  = "rgba(255,255,255,0.35)"
+                b_clr  = "#FFFFFF"
+                b_icon = "✅"
+                b_text = "Keuangan Aman"
+                b_sub  = f"Sisa {fmt(total_budget_now - expense_total)}"
+
+            budget_badge_html = f"""
+            <div style="background:{b_bg};border:1px solid {b_brd};border-radius:12px;
+                    padding:10px 18px;text-align:center;min-width:155px">
+                <div style="font-size:1.3rem;line-height:1">{b_icon}</div>
+                <div style="font-weight:700;color:{b_clr};font-size:0.88rem;margin-top:4px">{b_text}</div>
+                <div style="font-size:0.70rem;color:rgba(255,255,255,0.70);margin-top:2px">{b_sub}</div>
+                <div style="font-size:0.68rem;color:rgba(255,255,255,0.55);margin-top:1px">{pct_label}</div>
+            </div>
+            """
+
+    # ── Header ────────────────────────────────────────────────────────────────
+    st.markdown(f"""
+    <div class="header" style="display:flex;justify-content:space-between;align-items:center">
+        <div>
+            <h1>Dashboard Analitik Transaksi</h1>
+            <p>Periode: {period} &nbsp;·&nbsp; {datetime.now().strftime('%d %b %Y, %H:%M')}</p>
+        </div>
+        {budget_badge_html}
+    </div>
+    """, unsafe_allow_html=True)
+
     k1, k2, k3, k4 = st.columns(4)
     with k1:
         st.markdown(f"""<div class="kpi"><div class="label">Pemasukan</div>
