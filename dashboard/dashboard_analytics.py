@@ -167,7 +167,7 @@ def main():
             date_start = min_date
             date_end   = max_date
             period     = "Semua Data"
-        elif filter_mode == ("Bulan Ini","Bulan Ini"):
+        elif filter_mode == ("Bulan Ini"):
             nama_bulan_id = [
                 "Januari","Februari","Maret","April","Mei","Juni",
                 "Juli","Agustus","September","Oktober","November","Desember"
@@ -519,7 +519,7 @@ def main():
                     f"({pct_total:.0f}%)"
                 )
 
-                if filter_mode == "Bulan Tertentu":
+                if filter_mode == ("Bulan Tertentu","Bulan Ini"):
                     st.markdown(f"##### {expander_label}")
                     container = st.container()
                 else:
