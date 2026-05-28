@@ -271,6 +271,8 @@ def main():
         delta_days = (date_end - date_start).days + 1
         prev_end   = date_start - timedelta(days=1)
         prev_start = prev_end - timedelta(days=delta_days - 1)
+    prev_label = f"{prev_start.strftime('%d %b')} - {prev_end.strftime('%d %b %Y')}"
+        
     df_prev_exp = df_all[
         (df_all["date"].dt.date >= prev_start) &
         (df_all["date"].dt.date <= prev_end) &
