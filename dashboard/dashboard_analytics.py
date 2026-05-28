@@ -416,8 +416,7 @@ def main():
                 values=cat_sum["amount"],
                 hole=0.55,
                 marker=dict(colors=[CATEGORY_COLORS.get(c, "#888780") for c in cat_sum["category"]]),
-                textinfo="percent+label",
-                textfont_size=11,
+                textinfo="none",
                 hovertemplate="<b>%{label}</b><br>Rp %{value:,.0f} (%{percent})<extra></extra>",
             ))
             fig3.add_annotation(
@@ -426,8 +425,16 @@ def main():
                 font=dict(size=13, family="Plus Jakarta Sans")
             )
             fig3.update_layout(
-                height=320, margin=dict(l=0, r=0, t=10, b=0),
-                showlegend=False,
+                height=380, margin=dict(l=0, r=0, t=10, b=0),
+                showlegend=True,
+                legend=dict(
+                    orientation="h",
+                    y=-0.15,
+                    x=0.5,
+                    xanchor="center",
+                    font=dict(size=11, family="Plus Jakarta Sans"),
+                    itemwidth=80,
+                ),
                 plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
             )
             st.plotly_chart(fig3, use_container_width=True)
@@ -538,7 +545,7 @@ def main():
                     st.markdown(
                         f'<div style="margin-bottom:20px;background:white;border:1px solid #EFEFEF;border-radius:10px;padding:12px 16px">'
                         f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
-                        f'<span style="font-weight:600;font-size:0.88rem;color:#1a1a1a">Total Budget</span>'
+                        f'<span style="font-weight:600;font-size:0.88rem;color:#1a1a1a">Budget Keseluruhan</span>'
                         f'<span style="font-size:0.75rem;font-weight:600;padding:2px 8px;border-radius:20px;'
                         f'background:{"#FCEBEB" if pct_total>=100 else ("#FAEEDA" if pct_total>=80 else "#E1F5EE")};'
                         f'color:{"#A32D2D" if pct_total>=100 else ("#854F0B" if pct_total>=80 else "#0F6E56")}">'
