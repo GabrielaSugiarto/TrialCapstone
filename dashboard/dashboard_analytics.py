@@ -393,7 +393,7 @@ def main():
     # =========================================================================
     # CHART 3: Donut + Metode Pembayaran
     # =========================================================================
-    col_a, col_b = st.columns([4, 6])
+    col_a, col_b = st.columns([5, 5])
     with col_a:
         st.subheader("Komposisi Pengeluaran")
         if not df_exp.empty:
@@ -436,7 +436,7 @@ def main():
                 hovertemplate="<b>%{x}</b><br>%{y} transaksi<extra></extra>",
             ))
             fig5.update_layout(
-                height=280, margin=dict(l=0, r=0, t=30, b=0),
+                height=360, margin=dict(l=0, r=0, t=30, b=0),
                 title=dict(text="Jumlah Transaksi", font=dict(size=13)),
                 yaxis=dict(gridcolor="#F5F5F5"),
                 plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
@@ -452,7 +452,7 @@ def main():
                 hovertemplate="<b>%{x}</b><br>Rp %{y:,.0f}<extra></extra>",
             ))
             fig6.update_layout(
-                height=280, margin=dict(l=0, r=0, t=30, b=0),
+                height=360, margin=dict(l=0, r=0, t=30, b=0),
                 title=dict(text="Total Nominal", font=dict(size=13)),
                 yaxis=dict(tickprefix="Rp ", tickformat=",.0f", gridcolor="#F5F5F5"),
                 plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
@@ -643,43 +643,6 @@ def main():
         st.info("Tidak ada data pengeluaran untuk periode ini.")
 
     st.markdown("<hr>", unsafe_allow_html=True)
-
-    # =========================================================================
-    # CHART 4: Metode Pembayaran
-    # =========================================================================
-    st.subheader("Metode Pembayaran")
-    col_m1, col_m2 = st.columns(2)
-    with col_m1:
-        method_count = df.groupby("method").size().reset_index(name="jumlah").sort_values("jumlah", ascending=False)
-        fig5 = go.Figure(go.Bar(
-            x=method_count["method"], y=method_count["jumlah"],
-            marker=dict(color=[METHOD_COLORS.get(m, "#888780") for m in method_count["method"]]),
-            text=method_count["jumlah"], textposition="outside",
-            hovertemplate="<b>%{x}</b><br>%{y} transaksi<extra></extra>",
-        ))
-        fig5.update_layout(height=280, margin=dict(l=0, r=0, t=30, b=0),
-                            title=dict(text="Jumlah Transaksi per Metode", font=dict(size=13)),
-                            yaxis=dict(gridcolor="#F5F5F5"),
-                            plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
-                            font=dict(family="Plus Jakarta Sans"))
-        st.plotly_chart(fig5, use_container_width=True)
-    with col_m2:
-        method_sum = df.groupby("method")["amount"].sum().reset_index().sort_values("amount", ascending=False)
-        fig6 = go.Figure(go.Bar(
-            x=method_sum["method"], y=method_sum["amount"],
-            marker=dict(color=[METHOD_COLORS.get(m, "#888780") for m in method_sum["method"]]),
-            text=[fmt(v) for v in method_sum["amount"]], textposition="outside",
-            hovertemplate="<b>%{x}</b><br>Rp %{y:,.0f}<extra></extra>",
-        ))
-        fig6.update_layout(height=280, margin=dict(l=0, r=0, t=30, b=0),
-                            title=dict(text="Total Nominal per Metode", font=dict(size=13)),
-                            yaxis=dict(tickprefix="Rp ", tickformat=",.0f", gridcolor="#F5F5F5"),
-                            plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)",
-                            font=dict(family="Plus Jakarta Sans"))
-        st.plotly_chart(fig6, use_container_width=True)
-
-    st.markdown("<hr>", unsafe_allow_html=True)
-
     
     # =========================================================================
     # TABEL TRANSAKSI
