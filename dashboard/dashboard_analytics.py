@@ -307,11 +307,11 @@ def main():
         saldo_color = "#1D9E75" if saldo >= 0 else "#D85A30"
         st.markdown(f"""<div class="kpi"><div class="label">Saldo Bersih</div>
             <div class="value" style="color:{saldo_color}">{fmt(saldo)}</div>
-            <div class="sub">Savings: {savings_pct:.0f}%</div></div>""", unsafe_allow_html=True)
+            <div class="sub">Dana Tersisa: {savings_pct:.0f}%</div></div>""", unsafe_allow_html=True)
     with k4:    
         st.markdown(f"""<div class="kpi"><div class="label">Total Transaksi</div>
             <div class="value" style="color:#7F77DD">{len(df)}</div>
-            <div class="sub">income + expense</div></div>""", unsafe_allow_html=True)
+            <div class="sub">Pemasukan dan Pengeluaran</div></div>""", unsafe_allow_html=True)
 
     # =========================================================================
     # CHART 1: Cashflow Bulanan
