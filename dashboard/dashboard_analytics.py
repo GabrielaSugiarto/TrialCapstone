@@ -284,7 +284,12 @@ def main():
     )
 
     budget_badge_html = ""
-    if total_budget_now > 0:
+    if show_budget_warning and not df_budget.empty:
+        current_month_str = today.strftime("%Y-%m")
+        budget_bulan      = df_budget[df_budget["month"] == current_month_str]
+        total_budget_now  = budget_bulan["amount"].sum()
+
+        if total_budget_now > 0:
             day_of_month   = today.day
             days_in_month  = calendar.monthrange(today.year, today.month)[1]
             spending_ratio = expense_total / total_budget_now
