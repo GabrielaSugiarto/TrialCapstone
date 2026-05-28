@@ -344,6 +344,15 @@ def main():
             f'</div>'
         )
         st.markdown(html, unsafe_allow_html=True)
+        st.write({
+            "expense": expense_total,
+            "budget_prorata": budget_prorata,
+            "days_elapsed": days_elapsed,
+            "days_in_month": days_in_period,
+            "time_progress": days_elapsed / days_in_period,
+            "spending_ratio": expense_total / max(budget_prorata, 1),
+        })
+
 
     # =========================================================================
     # CHART 1: Cashflow Bulanan
@@ -697,14 +706,6 @@ def main():
     </div>
     """, unsafe_allow_html=True)
 
-    st.write({
-        "expense": expense_total,
-        "budget_prorata": budget_prorata,
-        "days_elapsed": days_elapsed,
-        "days_in_month": days_in_period,
-        "time_progress": days_elapsed / days_in_period,
-        "spending_ratio": expense_total / max(budget_prorata, 1),
-    })
-
+    
 if __name__ == "__main__":
     main()
