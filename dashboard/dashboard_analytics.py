@@ -206,10 +206,23 @@ def main():
 
         st.markdown("---")
         exp_cats      = sorted(df_all[df_all["type"] == "expense"]["category"].unique())
+        options = ["Select all"] + exp_cats
         selected_cats = st.multiselect(
             "🏷️ Kategori", 
             options=exp_cats, 
             default=exp_cats)
+        if "Select all" in selected_cats:
+            selected_cats = exp_cats
+            display_text = "All"
+
+        elif len(selected_cats) > 2:
+            short_names = [cat[:3] for cat in selected_cats]
+            display_text = ", ".join(short_names)
+        else:
+            display_text = ", ".join(selected_cats)
+            
+        st.caption(f"Selected: {display_text}")
+        
         st.markdown("---")
         st.caption(f"User ID: **{user_id}**")
         st.caption(f"Total data: **{len(df_all)} transaksi**")
