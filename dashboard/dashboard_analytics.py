@@ -206,7 +206,7 @@ def main():
 
         st.markdown("---")
         exp_cats      = sorted(df_all[df_all["type"] == "expense"]["category"].unique())
-        selected_cats = st.pills(
+        selected_cats = st.multiselect(
             "🏷️ Kategori", 
             options=exp_cats, 
             default=exp_cats,
