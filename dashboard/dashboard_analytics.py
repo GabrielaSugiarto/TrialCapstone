@@ -303,18 +303,21 @@ def main():
                 c_bg     = "#FFF5F5"
                 c_label  = "BAHAYA"
                 c_text   = "Budget Terlampaui"
+                c_sub    = f"+{fmt(expense_total - total_budget_now)}"
                 c_clr    = "#A32D2D"
             elif spending_ratio >= 0.8 or projected > total_budget_now:
                 c_border = "#D4860A"
                 c_bg     = "#FFFBF0"
                 c_label  = "WASPADA"
                 c_text   = "Budget Menipis"
+                c_sub    = f"Sisa Budget: {fmt(total_budget_now - expense_total)}"
                 c_clr    = "#854F0B"
             else:
                 c_border = "#1D9E75"
                 c_bg     = "#F0FBF7"
                 c_label  = "AMAN"
                 c_text   = "Keuangan Sehat"
+                c_sub    = f"Sisa Budget: {fmt(total_budget_now - expense_total)}"
                 c_clr    = "#0F6E56"
 
             budget_badge_html = (
@@ -323,11 +326,11 @@ def main():
                 f'<div style="font-size:0.68rem;font-weight:600;color:{c_clr};letter-spacing:2px;'
                 f'text-transform:uppercase;opacity:0.75;">Status Keuangan</div>'
                 f'<div style="font-size:1.7rem;font-weight:800;color:{c_clr};'
-                f'letter-spacing:2px;margin:4px 0;">{c_label}</div>'
+                f'letter-spacing:2px;margin:2px 0;">{c_label}</div>'
                 f'<div style="width:36px;height:2px;background:{c_border};'
-                f'margin:4px auto;border-radius:2px;"></div>'
+                f'margin:2px auto;border-radius:2px;"></div>'
                 f'<div style="font-size:0.78rem;font-weight:600;color:{c_clr};">{c_text}</div>'
-                f'<div style="font-size:0.72rem;color:{c_clr};opacity:0.70;margin-top:3px;">{c_sub}</div>'
+                f'<div style="font-size:0.72rem;color:{c_clr};opacity:0.70;margin-top:2px;">{c_sub}</div>'
                 f'<div style="font-size:0.68rem;color:{c_clr};opacity:0.55;margin-top:2px;">{pct_label}</div>'
                 f'</div>'
             )
@@ -345,7 +348,7 @@ def main():
             )
         with col_status:
             st.markdown(
-                f'<div style="padding-top:4px;">{budget_badge_html}</div>',
+                f'<div style="padding-top:2px;">{budget_badge_html}</div>',
                 unsafe_allow_html=True
             )
     else:
