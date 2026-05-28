@@ -20,6 +20,7 @@ import calendar
 import requests                          
 from PIL import Image
 from io import BytesIO
+from pathlib import Path
 import streamlit_antd_components as sac
 
 load_dotenv()
@@ -41,7 +42,7 @@ METHOD_COLORS = {
     "E-Wallet": "#7F77DD",
 }
 
-logo_path = Path(__file__).parent / "logo-sawit.png"
+logo_path = "https://raw.githubusercontent.com/maxrumbo/CapstoneProject_CC26-PSU329/development/client/public/logo-sawit.png"
 
 st.set_page_config(
     page_title="SAWIT - Transaksi",
@@ -150,6 +151,7 @@ def main():
       
     # ── Sidebar ───────────────────────────────────────────────────────────────
     with st.sidebar:
+        st.image(str(logo_path), width=180)
         st.markdown("### 🌴 SAWIT")
         st.caption("Dashboard Analitik Transaksi")
         st.markdown("---")
