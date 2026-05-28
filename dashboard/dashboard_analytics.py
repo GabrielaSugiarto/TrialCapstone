@@ -54,10 +54,6 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-[data-testid="stIconMaterial"] {
-    display: flex;
-    align-items: center;
-}
 [data-testid="stIconMaterial"]::after {
     content: "Buka Filter";
     font-size: 13px;
