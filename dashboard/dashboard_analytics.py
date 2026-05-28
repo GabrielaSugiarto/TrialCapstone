@@ -532,10 +532,25 @@ def main():
 
                 with st.expander(expander_label, expanded=is_current):
                     bar_color_total = "#A32D2D" if pct_total >= 100 else ("#EF9F27" if pct_total >= 80 else "#1D9E75")
+                    sisa_total = max(total_budget - total_actual, 0)
+                    over_total = max(total_actual - total_budget, 0)
+                    
                     st.markdown(
-                        f'<div style="background:#F0F0F0;border-radius:6px;height:6px;margin-bottom:16px">'
-                        f'<div style="background:{bar_color_total};width:{min(pct_total,100):.0f}%;height:6px;border-radius:6px"></div>'
-                        f'</div>',
+                        f'<div style="margin-bottom:20px;background:white;border:1px solid #EFEFEF;border-radius:10px;padding:12px 16px">'
+                        f'<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">'
+                        f'<span style="font-weight:600;font-size:0.88rem;color:#1a1a1a">Total Budget</span>'
+                        f'<span style="font-size:0.75rem;font-weight:600;padding:2px 8px;border-radius:20px;'
+                        f'background:{"#FCEBEB" if pct_total>=100 else ("#FAEEDA" if pct_total>=80 else "#E1F5EE")};'
+                        f'color:{"#A32D2D" if pct_total>=100 else ("#854F0B" if pct_total>=80 else "#0F6E56")}">'
+                        f'{"OVER +" + fmt(over_total) if pct_total>=100 else f"{pct_total:.0f}% terpakai"}</span>'
+                        f'</div>'
+                        f'<div style="display:flex;justify-content:space-between;font-size:0.74rem;color:#888;margin-bottom:8px">'
+                        f'<span>{fmt(total_actual)} dari {fmt(total_budget)}</span>'
+                        f'<span>Sisa: {fmt(sisa_total)}</span>'
+                        f'</div>'
+                        f'<div style="background:#F0F0F0;border-radius:6px;height:7px">'
+                        f'<div style="background:{bar_color_total};width:{min(pct_total,100):.0f}%;height:7px;border-radius:6px"></div>'
+                        f'</div></div>',
                         unsafe_allow_html=True
                     )
 
