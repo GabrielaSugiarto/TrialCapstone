@@ -393,7 +393,7 @@ def main():
     # =========================================================================
     # CHART 3: Donut + Metode Pembayaran
     # =========================================================================
-    col_a, col_b = st.columns([5, 5])
+    col_a, col_b = st.columns([3, 7])
     with col_a:
         st.subheader("Komposisi Pengeluaran")
         if not df_exp.empty:
@@ -418,7 +418,7 @@ def main():
                 font=dict(size=13, family="Plus Jakarta Sans")
             )
             fig3.update_layout(
-                height=360, margin=dict(l=0, r=0, t=10, b=0),
+                height=320, margin=dict(l=0, r=0, t=10, b=0),
                 showlegend=False,
                 plot_bgcolor="rgba(0,0,0,0)", paper_bgcolor="rgba(0,0,0,0)"
             )
