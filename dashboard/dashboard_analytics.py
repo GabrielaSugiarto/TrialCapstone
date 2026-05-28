@@ -219,7 +219,7 @@ def main():
             "🏷️ Kategori", 
             options=exp_cats, 
             default=exp_cats,
-            format_func=lambda x: f"{x} ({short_map[x]})"
+            format_func=lambda x: short_map.get(x, x[:3])
         )
         st.write(selected_cats)
         
