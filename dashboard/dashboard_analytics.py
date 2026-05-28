@@ -158,8 +158,8 @@ def main():
 
         filter_mode = st.selectbox(
             "📅 Filter Periode",
-            options=["Semua Data", "7 Hari Terakhir", "30 Hari Terakhir",
-                     "90 Hari Terakhir", "Bulan Tertentu", "Rentang Tanggal"],
+            options=[ "Bulan Ini", "7 Hari Terakhir", "30 Hari Terakhir",
+                     "90 Hari Terakhir", "Bulan Tertentu", "Rentang Tanggal", "Semua Data"],
             index=0,
         )
 
@@ -167,7 +167,16 @@ def main():
             date_start = min_date
             date_end   = max_date
             period     = "Semua Data"
-
+        elif filter_mode == "Bulan Ini":
+            nama_bulan_id = [
+                "Januari","Februari","Maret","April","Mei","Juni",
+                "Juli","Agustus","September","Oktober","November","Desember"
+            ]
+            current_period = pd.Period(today.strftime("%Y-%m"), freq="M")
+            date_start     = current_period.start_time.date()
+            date_end       = current_period.end_time.date()
+            period         = f"{nama_bulan_id[today.month - 1]} {today.year}"
+    
         elif filter_mode == "7 Hari Terakhir":
             date_start = today - timedelta(days=7)
             date_end   = today
