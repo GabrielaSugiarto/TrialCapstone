@@ -227,7 +227,8 @@ def main():
             radius="md",
             variant="filled",
         )
-        selected_cats = [exp_cats[i] for i in selected_indices]
+        reverse_map = {v: k for k, v in short_map.items()}
+        selected_cats = [reverse_map.get(label, label) for label in (selected_labels or [])]
         
         st.markdown("---")
         st.caption(f"User ID: **{user_id}**")
