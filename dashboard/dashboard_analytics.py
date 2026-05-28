@@ -17,6 +17,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from dotenv import load_dotenv
 import calendar
+import streamlit_antd_components as sac
 
 load_dotenv()
 
@@ -215,13 +216,19 @@ def main():
             "Tagihan": "Tag",
             "Transportasi": "Tra"
         }
-        selected_cats = st.multiselect(
-            "🏷️ Kategori", 
-            options=exp_cats, 
-            default=exp_cats,
-            format_func=lambda x: short_map.get(x, x[:3])
+        selected_indices = sac.chip(
+            items=[
+                sac.ChipItem(label=short_map.get(c, c[:3]), icon="tag")
+                for c in exp_cats
+            ],
+            label="🏷️ Kategori",
+            index=list(range(len(exp_cats))),   # semua selected by default
+            multiple=True,
+            radius="md",
+            variant="filled",
         )
-                
+        selected_cats = [exp_cats[i] for i in selected_indices]
+        
         st.markdown("---")
         st.caption(f"User ID: **{user_id}**")
         st.caption(f"Total data: **{len(df_all)} transaksi**")
