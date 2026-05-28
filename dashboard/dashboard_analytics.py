@@ -207,12 +207,14 @@ def main():
 
         st.markdown("---")
         exp_cats      = sorted(df_all[df_all["type"] == "expense"]["category"].unique())
-        st.markdown("🏷️ Pilih Kategori")       
+        st.markdown("🏷️ Kategori Pengeluaran")
+        st.caption("Hapus centang untuk memilih sebagian kategori")
         semua = st.checkbox("Semua Kategori", value=True, key="all_cats")
         if semua:
             selected_cats = exp_cats
         else:
             selected_cats = st.multiselect(
+                "Pilih Kategori",
                 options=exp_cats,
                 default=exp_cats
             )
