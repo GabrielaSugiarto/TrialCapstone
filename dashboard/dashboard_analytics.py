@@ -157,7 +157,7 @@ def main():
         st.markdown("---")
 
         filter_mode = st.selectbox(
-            "📅 Filter Periode",
+            "Filter Periode",
             options=[ "Bulan Ini", "7 Hari Terakhir", "30 Hari Terakhir",
                      "90 Hari Terakhir", "Bulan Tertentu", "Rentang Tanggal", "Semua Data"],
             index=0,
@@ -223,7 +223,7 @@ def main():
 
         st.markdown("---")
         exp_cats      = sorted(df_all[df_all["type"] == "expense"]["category"].unique())
-        st.markdown("🏷️ Kategori Pengeluaran")
+        st.markdown("Kategori Pengeluaran")
         semua = st.checkbox("Semua Kategori", value=True, key="all_cats")
         if semua:
             selected_cats = exp_cats
