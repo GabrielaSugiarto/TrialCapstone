@@ -326,7 +326,7 @@ def main():
                 f'<div style="background:{c_bg};border:2px solid {c_border};border-radius:14px;'
                 f'padding:6px 14px;text-align:center;min-width:0;">'
                 f'<div style="font-size:0.68rem;font-weight:600;color:{c_clr};letter-spacing:1px;'
-                f'text-transform:uppercase;opacity:0.75;">Status Keuangan</div>'
+                f'text-transform:uppercase;opacity:0.75;">Status Keuangan Bulan Ini </div>'
                 f'<div style="font-size:1.3rem;font-weight:800;color:{c_clr};'
                 f'letter-spacing:2px;margin:0 0 2px 0;">{c_label}</div>'
                 f'<div style="font-size:0.78rem;font-weight:600;color:{c_clr};">{c_text}</div>'
@@ -337,7 +337,7 @@ def main():
 
     # ── Header ────────────────────────────────────────────────────────────────
     if budget_badge_html:
-        col_header, col_status = st.columns([3, 1])
+        col_header, col_status = st.columns([2, 1])
         with col_header:
             st.markdown(
                 f'<div class="header">'
