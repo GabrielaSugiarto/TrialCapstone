@@ -102,7 +102,7 @@ def load_data(user_id: int) -> pd.DataFrame:
 
 @st.cache_data(ttl=30)
 def load_budget(user_id: int) -> pd.DataFrame:
-    response = supabase.table("budget").select("*").eq("user_id", user_id).execute()
+    response = supabase.table("user_budgets").select("*").eq("user_id", user_id).execute()
     df = pd.DataFrame(response.data)
     if df.empty:
         return df
