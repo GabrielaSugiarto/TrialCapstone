@@ -16,12 +16,12 @@ import streamlit as st
 import pandas as pd
 import plotly.graph_objects as go
 from dotenv import load_dotenv
-import calendar
-import requests                          
+import calendar                          
 from PIL import Image
 from io import BytesIO
 from pathlib import Path
 import streamlit_antd_components as sac
+from supabase import create_client
 
 load_dotenv()
 
@@ -82,15 +82,16 @@ def fmt(amount: float) -> str:
         return f"Rp {amount/1_000:.0f}rb"
     return f"Rp {amount:,.0f}"
 
-import requests
+supabase = create_client(
+    st.secrets["SUPABASE_URL"],
+    st.secrets["SUPABASE_KEY"]
+)
+
 @st.cache_data(ttl=30)
 def load_data(user_id: int) -> pd.DataFrame:
-    response = requests.get(
-        "https://coba-render-vercel.vercel.app/transactions/",
-        params={"user_id": user_id}
-    )
-    df = pd.DataFrame(response.json())
-
+    response = supabase.table("transactions").select("*").eq("user_id", user_id).execute()
+    df = pd.DataFrame(response.data)
+    
     df["date"]     = pd.to_datetime(df["date"], errors="coerce")
     df["amount"]   = pd.to_numeric(df["amount"], errors="coerce").fillna(0)
     df["category"] = df["category"].fillna("Pemasukan")
@@ -101,11 +102,8 @@ def load_data(user_id: int) -> pd.DataFrame:
 
 @st.cache_data(ttl=30)
 def load_budget(user_id: int) -> pd.DataFrame:
-    response = requests.get(
-        "https://coba-render-vercel.vercel.app/budget/",
-        params={"user_id": user_id}
-    )
-    df = pd.DataFrame(response.json())
+    response = supabase.table("budget").select("*").eq("user_id", user_id).execute()
+    df = pd.DataFrame(response.data)
     if df.empty:
         return df
     
