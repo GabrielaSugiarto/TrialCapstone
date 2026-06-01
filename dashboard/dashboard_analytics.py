@@ -92,6 +92,9 @@ def load_data(user_id: int) -> pd.DataFrame:
     response = supabase.table("transactions").select("*").eq("user_id", user_id).execute()
     df = pd.DataFrame(response.data)
     
+    if df.empty:          # ← tambah ini
+        return df         # ← langsung return kosong
+
     df["date"]     = pd.to_datetime(df["date"], errors="coerce")
     df["amount"]   = pd.to_numeric(df["amount"], errors="coerce").fillna(0)
     df["category"] = df["category"].fillna("Pemasukan")
