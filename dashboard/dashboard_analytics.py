@@ -143,7 +143,7 @@ def main():
         st.stop()
 
     if df_all.empty:
-        st.warning("Belum ada data transaksi untuk user ini.")
+        st.warning("Belum ada data catatan transaksi.")
         st.stop()
 
     min_date = df_all["date"].min().date()
