@@ -1,15 +1,3 @@
-"""
-SAWIT - Dashboard Analitik Transaksi
-Konek langsung ke PostgreSQL, fokus pada data transactions.
-
-Cara menjalankan:
-    streamlit run dashboard_transaksi.py
-
-File .env:
-    DATABASE_URL=postgresql://postgres:PASSWORD@localhost:5432/sawit_db
-    CURRENT_USER_ID=3
-"""
-
 import os
 from datetime import date, datetime, timedelta
 import streamlit as st
@@ -22,6 +10,7 @@ from io import BytesIO
 from pathlib import Path
 import streamlit_antd_components as sac
 from supabase import create_client
+import jwt
 
 load_dotenv()
 
@@ -115,20 +104,23 @@ def load_budget(user_id: int) -> pd.DataFrame:
     return df
 
 def get_user_id() -> int:
-    param = st.query_params.get("user_id")
-    if param:
+    token = st.query_params.get("token")
+    user_id_param = st.query_params.get("user_id")
+    if token:
         try:
-            return int(param)
+            payload = jwt.decode(
+                token,
+                options={"verify_signature": False}
+            )
+            return int(payload["sub"])
         except Exception:
-            pass
-    env = os.getenv("CURRENT_USER_ID")
-    if env:
-        try:
-            return int(env)
-        except Exception:
-            pass
-    return 1
-
+            st.error("Sesi expired, silakan login ulang.")
+            st.stop()
+    elif user_id_param:
+        return int(user_id_param)
+    
+    st.error("Akses ditolak. Silakan login melalui aplikasi.")
+    st.stop()
 
 def main():
     user_id = get_user_id()
