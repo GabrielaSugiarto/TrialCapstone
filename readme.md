@@ -112,9 +112,8 @@ berhasil diimplementasikan dan dapat diakses publik di https://sahabatduwit.verc
 
 
 ### Rekomendasi Action Items
-- Mengembangkan aplikasi mobile (iOS dan Android) untuk mendukung pencatatan transaksi 
-  real-time mengingat tingginya ketergantungan Generasi Z pada perangkat mobile
-- Mengimplementasikan active learning agar model Auto Categorization dapat terus 
-  berkembang dari koreksi pengguna, khususnya untuk kategori dengan F1-Score rendah 
-  seperti Langganan (81,39%) dan Transportasi (81,09%)
-- Menambahkan fitur OCR struk fisik dan deteksi otomatis langganan melalui parsing email
+1)	Mengembangkan aplikasi mobile (iOS dan Android) untuk mendukung pencatatan transaksi yang lebih cepat dan real-time mengingat Generasi Z sangat bergantung pada perangkat mobile dalam aktivitas sehari-hari.
+2)	Mengimplementasikan mekanisme active learning yang memungkinkan model belajar secara berkelanjutan dari koreksi yang diberikan oleh pengguna.
+3)	Menambahkan fitur OCR untuk struk fisik guna membuat pencatatan transaksi lebih sudah.
+4)	Menambahkan fitur chatbot sehingga pengguna dapat berinteraksi dan mendapatkan saran dengan maksimal.
+
